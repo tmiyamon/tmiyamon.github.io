@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  
+  <url>
+    <loc>http://tmiyamon.github.io/blog/2014/10/13/try-to-use-compass-in-rails/</loc>
+    <lastmod>2014-10-13T08:35:32+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tmiyamon.github.io/blog/2014/10/09/how-to-start-android-development-with-android-studio/</loc>
+    <lastmod>2014-10-09T11:51:15+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tmiyamon.github.io/blog/2014/08/13/rails-counter-methods/</loc>
+    <lastmod>2014-08-13T02:53:47+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tmiyamon.github.io/blog/2014/02/20/posttitle/</loc>
+    <lastmod>2014-02-20T12:17:02+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  
+  <url>
+    <loc>http://tmiyamon.github.io/blog/archives/</loc>
+    <lastmod>2014-10-13T10:25:14+09:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>http://tmiyamon.github.io/</loc>
+    <lastmod>2014-10-13T10:25:14+09:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  
+</urlset>
