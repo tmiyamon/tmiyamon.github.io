@@ -37,6 +37,18 @@ decrement! 概要 modelをinstance化した後使用する。
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
   
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-55812786-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
 
 </head>
 
@@ -109,10 +121,15 @@ decrement! 概要 modelをinstance化した後使用する。
 
 <h2>概要</h2>
 
-<p>modelをinstance化した後使用する。<br/>
-基本的にattributeと差分を指定する。差分のデフォルト値は1。<br/>
+<p>modelをinstance化した後使用する。
+基本的にattributeと差分を指定する。差分のデフォルト値は1。
 incrementだと差分増加、decrementだと差分減少。
 !付きだとsaveする。!無しだとsaveしない。</p>
+
+<!-- more -->
+
+
+
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -210,6 +227,7 @@ incrementだと差分増加、decrementだと差分減少。
     </p>
     
       <div class="sharing">
+  <a href="http://b.hatena.ne.jp/entry/http://tmiyamon.github.io/blog/2014/08/13/rails-counter-methods/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
   
   <a href="//twitter.com/share" class="twitter-share-button" data-url="http://tmiyamon.github.io/blog/2014/08/13/rails-counter-methods/" data-via="" data-counturl="http://tmiyamon.github.io/blog/2014/08/13/rails-counter-methods/" >Tweet</a>
   

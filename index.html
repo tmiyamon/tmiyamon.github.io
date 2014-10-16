@@ -34,6 +34,18 @@ Compass 1.0.1 Compass 世の中にはCompassという便利なsass/scssライブ
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
   
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-55812786-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
 
 </head>
 
@@ -115,165 +127,12 @@ Compass 1.0.1 Compass 世の中にはCompassという便利なsass/scssライブ
 
 <p>今回はflex-boxを使いたくてCompass1.0.1を使おうとしたけれど依存の関係でそう簡単ではない、という話です。</p>
 
-<h2>Compass with Rails</h2>
-
-<p>CompassをRailsで使用する際には<a href="https://github.com/Compass/compass-rails">compass-rails</a>を使います。これはCompassをRailsで使用するためのgemですが、簡単にはいきませんでした。</p>
-
-<h3>バージョン指定無し</h3>
-
-<p>通常のgemと同様に</p>
-
-<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;sass-rails&#39;</span>
-</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;compass-rails&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>とGemfileに書いて</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>でインストールできます。</p>
-
-<p>この際何が問題になるかというと、インストールされるcompassのバージョンが以下の形で解決されてしまうことです。</p>
-
-<figure class='code'><figcaption><span>Gemfile.lock</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">compass</span><span class="o">-</span><span class="n">rails</span> <span class="p">(</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">compass</span> <span class="p">(</span><span class="o">&gt;=</span> <span class="mi">0</span><span class="o">.</span><span class="mi">12</span><span class="o">.</span><span class="mi">2</span><span class="p">)</span>
-</span><span class='line'><span class="n">compass</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">12</span><span class="o">.</span><span class="mi">7</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">sass</span> <span class="p">(</span><span class="o">~&gt;</span> <span class="mi">3</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">19</span><span class="p">)</span>
-</span><span class='line'><span class="n">sass</span><span class="o">-</span><span class="n">rails</span> <span class="p">(</span><span class="mi">4</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">sass</span> <span class="p">(</span><span class="o">~&gt;</span> <span class="mi">3</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="p">)</span>
-</span><span class='line'><span class="n">sass</span> <span class="p">(</span><span class="mi">3</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">19</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>最終的にはsassのバージョンが問題となってcompassが0.12.7までしか入りません。</p>
-
-<h3>バージョン指定 sass-rails</h3>
-
-<p>問題となるgemはsassでそのバージョンを限定しているのはsass-railsです。</p>
-
-<p>そこでsass-railsのバージョンを上げる方向で解決を測りました。</p>
-
-<p>sass-railsのバージョンは現在5.0.0beta1（！）がリリースされているのでそれで試してみます。</p>
-
-<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;sass-rails&#39;</span><span class="p">,</span> <span class="s1">&#39;5.0.0beta1&#39;</span>
-</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;compass-rails&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Gemfileを↑に書き換えて再度bundle。すると以下のエラーを得ます。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>Bundler could not find compatible versions <span class="k">for</span> gem <span class="s2">&quot;sprockets&quot;</span>:
-</span><span class='line'>  In snapshot <span class="o">(</span>Gemfile.lock<span class="o">)</span>:
-</span><span class='line'>    sprockets <span class="o">(</span>2.11.0<span class="o">)</span>
-</span><span class='line'>
-</span><span class='line'>  In Gemfile:
-</span><span class='line'>    sass-rails <span class="o">(=</span> 5.0.0beta1<span class="o">)</span> ruby depends on
-</span><span class='line'>      sprockets <span class="o">(</span>~&gt; 2.12<span class="o">)</span> ruby
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Gemfile.lockを見ると、 sprocketsが2.11.0で解決されていることが原因のようです。ならばとsprocketsをupdateします。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle update sprockets
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>これで全ての依存が解決しましたが、Gemfile.lockを覗いてみると肝心のcompassが古いままです。compass-railsも大雑把に指定してくれているのでcompass-railsごとバージョンをあげます。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle update compass-rails
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>すると</p>
-
-<figure class='code'><figcaption><span>Gemfile.lock</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">compass</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>                       <span class="o">&lt;-</span> <span class="s1">&#39;!!!!&#39;</span>
-</span><span class='line'>  <span class="n">chunky_png</span> <span class="p">(</span><span class="o">~&gt;</span> <span class="mi">1</span><span class="o">.</span><span class="mi">2</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">compass</span><span class="o">-</span><span class="n">core</span> <span class="p">(</span><span class="o">~&gt;</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">compass</span><span class="o">-</span><span class="n">import</span><span class="o">-</span><span class="n">once</span> <span class="p">(</span><span class="o">~&gt;</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">rb</span><span class="o">-</span><span class="n">fsevent</span> <span class="p">(</span><span class="o">&gt;=</span> <span class="mi">0</span><span class="o">.</span><span class="mi">9</span><span class="o">.</span><span class="mi">3</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">rb</span><span class="o">-</span><span class="n">inotify</span> <span class="p">(</span><span class="o">&gt;=</span> <span class="mi">0</span><span class="o">.</span><span class="mi">9</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">sass</span> <span class="p">(</span><span class="o">&gt;=</span> <span class="mi">3</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">13</span><span class="p">,</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span>
-</span><span class='line'><span class="n">compass</span><span class="o">-</span><span class="n">core</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">multi_json</span> <span class="p">(</span><span class="o">~&gt;</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">sass</span> <span class="p">(</span><span class="o">&gt;=</span> <span class="mi">3</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="p">,</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span>
-</span><span class='line'><span class="n">compass</span><span class="o">-</span><span class="n">import</span><span class="o">-</span><span class="n">once</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">sass</span> <span class="p">(</span><span class="o">&gt;=</span> <span class="mi">3</span><span class="o">.</span><span class="mi">2</span><span class="p">,</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span>
-</span><span class='line'><span class="n">compass</span><span class="o">-</span><span class="n">rails</span> <span class="p">(</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">compass</span> <span class="p">(</span><span class="o">~&gt;</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p> <strong>来ました！</strong> 目的のcompass1.0.1ですね！</p>
-
-<p>sass-railsがbeta1なのが気がかりですが、今のところ動作に問題ないように思います。</p>
-
-<p>今回は比較的小規模なプロジェクトだったのでそこまで大変ではありませんでしたが、大きなプロジェクトではさらに依存解決が大変そうですね。</p>
-
-<h2>まとめ</h2>
-
-<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;sass-rails&#39;</span><span class="p">,</span> <span class="s1">&#39;5.0.0beta1&#39;</span>
-</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;compass-rails&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0.1&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle update sprockets
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>おまけ</h2>
-
-<p>そもそもなぜsass3.3にcompassが依存しているのか、という話です。</p>
-
-<p>この分野には疎いのですが、どうやらsassは今でもバージョンアップがあるらしく、そのなかで3.3で連想配列等の新しい記法が幾つか追加されました。</p>
-
-<p>compassはその追加記法を使用しているため、sass3.3に依存している、という内部構造のようです。</p>
-
-<p>sassは僕が思っていたよりもよほど構造化できる文法を持っているようですねー</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/10/13/try-to-use-compass-in-rails/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -311,67 +170,12 @@ Compass 1.0.1 Compass 世の中にはCompassという便利なsass/scssライブ
 
 <p>環境はOXS 10.9.5を想定しています。</p>
 
-<h2>Android Studio</h2>
-
-<p><a href="https://developer.android.com/sdk/installing/studio.html">Android Studio</a>をダウンロードするだけでとりあえずの環境は作れます。</p>
-
-<p>Android StudioはIntelliJがベースなのでIdeaVimなどのIntelliJプラグインを好みに応じて導入できます。</p>
-
-<p>以下は僕が追加で行った設定です。</p>
-
-<h2>JDK設定</h2>
-
-<p>実はAndroid Studioをダウンロードしただけでは起動しませんでした。</p>
-
-<p>原因はAndroid StudioがJava6で起動しようとしていたからです。</p>
-
-<p>これに対し僕の環境のバージョンはJava7が入っていました。</p>
-
-<p>Android Studioが持つ設定ファイルのJVMVersionを変更することで起動するようになりました。</p>
-
-<figure class='code'><figcaption><span>/Applications/Android Studio.app/Contents/Info.plist</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'>  <span class="nt">&lt;key&gt;</span>JVMVersion<span class="nt">&lt;/key&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;string&gt;</span>1.6*<span class="nt">&lt;/string&gt;</span>
-</span><span class='line'>
-</span><span class='line'>  ↓
-</span><span class='line'>
-</span><span class='line'>  <span class="nt">&lt;key&gt;</span>JVMVersion<span class="nt">&lt;/key&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;string&gt;</span>1.7*<span class="nt">&lt;/string&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>外部Android SDKの参照</h2>
-
-<p>android sdkは上記のAndroid Studioにバンドルされているため別途導入する必要はないのですが、ionic等別環境と同時に使用するときにsdkを共有させたい場合があります。</p>
-
-<p>要するに外部sdkをAndroid Studioから参照するやりかたですね。</p>
-
-<p><img class="left" src="/images/android-studio-menu-close-project.png" width="200" height="200"></p>
-
-<p>既にプロジェクトを開いている場合はメニューのFile -> Close Projectから一旦プロジェクトを閉じます。</p>
-
-<p>Quick Start画面に戻り、Configure -> Project Defaults -> Project Structureの順に辿り、SDK Locationを開きます。ここでプロジェクト作成時のデフォルト設定を行うことができます。</p>
-
-<p>ここのAndroid SDK Locationで自分の指定したいsdkのパスを設定します。</p>
-
-<p><img src="/images/android-studio-quickstart.png" width="150" height="150">
-<img src="/images/android-studio-configure.png" width="150" height="150">
-<img src="/images/android-studio-project-defaults.png" width="150" height="150">
-<img src="/images/android-studio-sdk-location.png" width="150" height="150"></p>
-
-<p>すでに設定前に作ったプロジェクトに関しては、新しく開いたときに「SDKのバージョンが一致してないけどどうする？」みたいなことを聞かれる（はず）なので適宜ガイドに従えばいけるとおもいます。</p>
-
-<h2>その他</h2>
-
-<p>プラグインを導入するためにはメニューのAndroid Studio -> Preferences -> Plugins</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/10/09/how-to-start-android-development-with-android-studio/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -417,80 +221,17 @@ Compass 1.0.1 Compass 世の中にはCompassという便利なsass/scssライブ
 
 <h2>概要</h2>
 
-<p>modelをinstance化した後使用する。<br/>
-基本的にattributeと差分を指定する。差分のデフォルト値は1。<br/>
+<p>modelをinstance化した後使用する。
+基本的にattributeと差分を指定する。差分のデフォルト値は1。
 incrementだと差分増加、decrementだと差分減少。
 !付きだとsaveする。!無しだとsaveしない。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">u</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">first</span>
-</span><span class='line'><span class="n">u</span><span class="o">.</span><span class="n">likes_count</span>                <span class="c1"># =&gt; 1 (初期値)</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">u</span><span class="o">.</span><span class="n">increment</span> <span class="ss">:likes_count</span><span class="p">,</span> <span class="mi">3</span>
-</span><span class='line'><span class="n">u</span><span class="o">.</span><span class="n">likes_count</span>                <span class="c1"># =&gt; 4</span>
-</span><span class='line'><span class="n">u</span><span class="o">.</span><span class="n">decrement</span> <span class="ss">:likes_count</span><span class="p">,</span> <span class="mi">3</span>
-</span><span class='line'><span class="n">u</span><span class="o">.</span><span class="n">likes_count</span>                <span class="c1"># =&gt; 1</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">u</span><span class="o">.</span><span class="n">increment!</span> <span class="ss">:likes_count</span><span class="p">,</span> <span class="mi">3</span>
-</span><span class='line'><span class="no">User</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">likes_count</span>       <span class="c1"># =&gt; 4</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">u</span><span class="o">.</span><span class="n">decrement!</span> <span class="ss">:likes_count</span><span class="p">,</span> <span class="mi">3</span>
-</span><span class='line'><span class="no">User</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">likes_count</span>       <span class="c1"># =&gt; 1</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>*(おまけ)counter_cache操作系まとめ</h3>
-
-<p>実は上記のincrement!とdecrement!はcounter_cacheのattributeに対しては使用できない。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-</span><span class='line'>  <span class="n">has_many</span> <span class="ss">:likes</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">Like</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:user</span><span class="p">,</span> <span class="ss">counter_cache</span><span class="p">:</span> <span class="kp">true</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">User</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">increment!</span> <span class="ss">:likes_count</span>
-</span><span class='line'><span class="c1"># =&gt; ActiveRecord::ActiveRecordError: likes_count is marked as readonly</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>理由は<a href="http://stackoverflow.com/questions/4295404/problem-with-counter-cache-implementation">http://stackoverflow.com/questions/4295404/problem-with-counter-cache-implementation</a></p>
-
-<p>counter_cacheを手動で更新するときは下記メソッドを使用する。</p>
-
-<ul>
-<li>increment_counter</li>
-<li>decremnet_coutner</li>
-<li>update_counters</li>
-<li>reset_counters</li>
-</ul>
-
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/08/13/rails-counter-methods/">Read on &rarr;</a>
+    </footer>
   
 
 
