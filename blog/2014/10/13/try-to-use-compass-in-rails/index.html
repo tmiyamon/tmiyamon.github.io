@@ -170,7 +170,7 @@ Compass 1.0.1 Compass 世の中にはCompassという便利なsass/scssライブ
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>最終的にはsassのバージョンが問題となってcompassが0.12.7までしか入りません。</p>
+<p>最終的にはsassのバージョンが問題（古い）となってcompassが0.12.7までしか入りません。</p>
 
 <h3>バージョン指定 sass-rails</h3>
 
@@ -284,6 +284,31 @@ Compass 1.0.1 Compass 世の中にはCompassという便利なsass/scssライブ
 <p>compassはその追加記法を使用しているため、sass3.3に依存している、という内部構造のようです。</p>
 
 <p>sassは僕が思っていたよりもよほど構造化できる文法を持っているようですねー</p>
+
+<h2>追記(2014-10-17)</h2>
+
+<p>compassを使用するために<a href="https://rails-assets.org/">rails-assets</a>を使う方法もあります。</p>
+
+<p>インストールするには以下の様にGemfileに追加します。使用するためにはsourceも追加する必要があります。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">source</span> <span class="s1">&#39;https://rails-assets.org</span>
+</span><span class='line'>
+</span><span class='line'><span class="s1">gem &#39;</span><span class="n">rails</span><span class="o">-</span><span class="n">assets</span><span class="o">-</span><span class="n">compass</span><span class="o">-</span><span class="n">mixins</span><span class="err">&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>おそらく依存解決はできるんじゃないでしょうか。</p>
+
+<p>しかし手元ではなんちゃらがincludeできない、みたいなエラーに遭遇しました。</p>
+
+<p>どうやらこれもsassのバージョンが古いことが原因のようです。</p>
+
+<p>ということでcompass-railsと同様にsass-railsを5.0.0beta1に上げると解決します。</p>
+
+<p>どちらにしても今現在ではsass-rails-5.0.0beta1は必要っぽいですね。</p>
 </div>
 
 
