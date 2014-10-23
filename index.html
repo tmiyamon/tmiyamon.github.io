@@ -9,7 +9,7 @@
   <meta name="author" content="tmiyamon">
 
   
-  <meta name="description" content="webアプリで検索機能をつけたいときがありますよね。 そこまで最適化されていなくてもいいから機能をつけておきたい、みたいな。 そんなときRailsで使えるgemのRansackの紹介です。 すぐに試してみたいという方はこちら。デモのソースはこちら Ransack 一言で言えば、 &hellip;">
+  <meta name="description" content="webアプリで検索機能をつけたいときがありますよね。 そこまで最適化されていなくてもいいから機能をつけておきたい、みたいな。 そんなときRailsで使えるgemのRansackの紹介です。 すぐに試してみたいという方はこちら。デモのソースはこちら ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -116,138 +116,12 @@
 
 <p>すぐに試してみたいという方は<a href="http://ransack-demo.herokuapp.com/">こちら</a>。デモのソースは<a href="https://github.com/activerecord-hackery/ransack_demo">こちら</a></p>
 
-<h2 id="ransack">Ransack</h2>
-
-<p>一言で言えば、リクエストパラメータからsqlを生成するgemです。</p>
-
-<p>RansackはView Helperを持っています。</p>
-
-<p>View Helperが提供する中で重要なのはsearch_fieldとsort_linkで、検索対象のモデルのテーブルが持つカラムに対して、</p>
-
-<ul>
-  <li>search fieldなら指定されたカラムに対して様々な操作（likeや=など）</li>
-  <li>sort linkならorder by</li>
-</ul>
-
-<p>を生成します。</p>
-
-<p>search_fieldは<code>"#{カラムor関連名}_#{操作}"</code>の形で指定し、params[:q]に、 sort_linkはparams[:q][:s]に格納されます。</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class="line">  <span class="s1">&#39;q&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span>
-</span><span class="line">    <span class="s1">&#39;text_cont&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;keyword&#39;</span><span class="p">,</span>
-</span><span class="line">    <span class="s1">&#39;s&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span>
-</span><span class="line">      <span class="s1">&#39;created_at&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;desc&#39;</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">  <span class="p">}</span>
-</span><span class="line"><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>また、has manyやbelongs toといったassociation先に対しても指定することができます。</p>
-
-<p>超便利ですね！</p>
-
-<h3 id="getting-started">Getting Started</h3>
-
-<p>おなじみ</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">gem</span> <span class="s1">&#39;ransack&#39;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<h3 id="controller">Controller</h3>
-
-<p>検索フォームのリクエスト先であるController側では</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">def</span> <span class="nf">index</span>
-</span><span class="line">  <span class="vi">@q</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:q</span><span class="o">]</span><span class="p">)</span>
-</span><span class="line">  <span class="vi">@people</span> <span class="o">=</span> <span class="vi">@q</span><span class="o">.</span><span class="n">result</span><span class="p">(</span><span class="ss">distinct</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
-</span><span class="line"><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>といったん@qを生成し、検索結果自体はresultで取得します。</p>
-
-<p>@qは検索フォームの状態再現に使用されます。</p>
-
-<p>また、resultの返り値はActiveRecord::Relationのため、includeやmergeなど通常のActiveRecordと同様の扱いが可能です。</p>
-
-<h3 id="view">View</h3>
-
-<p>Ransackはform_forの拡張であるsearch_form_forを提供しています。search_form_forの引数にはcontrollerで作った@qを指定します。</p>
-
-<p>また、search_form_forの中ではsearch_fieldが使用でき、<code>"#{カラムor関連名}_#{操作}"</code>の形で検索フォームを作ることができます。</p>
-
-<p>以下は</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-</pre></td><td class="code"><pre><code class="erb"><span class="line"><span class="cp">&lt;%=</span> <span class="n">search_form_for</span> <span class="vi">@q</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class="line">
-</span><span class="line"><span class="x">  # nameが入力テキストを含むレコードを検索</span>
-</span><span class="line"><span class="x">  </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="ss">:name_cont</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class="line"><span class="x">  </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">search_field</span> <span class="ss">:name_cont</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class="line">
-</span><span class="line"><span class="x">  # articles.titleが入力テキストを含むレコードを検索</span>
-</span><span class="line"><span class="x">  </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="ss">:articles_title_start</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class="line"><span class="x">  </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">search_field</span> <span class="ss">:articles_title_start</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class="line">
-</span><span class="line"><span class="x">  # orで複数フィールドを指定できる</span>
-</span><span class="line"><span class="x">  </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="ss">:name_or_description_or_email_or_articles_title_cont</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class="line"><span class="x">  </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">search_field</span> <span class="ss">:name_or_description_or_email_or_articles_title_cont</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class="line">
-</span><span class="line"><span class="x">  </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">submit</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class="line"><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>sort_linkに関しては、@qとソートしたいフィールドを指定します。</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="erb"><span class="line"><span class="cp">&lt;%=</span> <span class="n">sort_link</span><span class="p">(</span><span class="vi">@q</span><span class="p">,</span> <span class="ss">:name</span><span class="p">,</span> <span class="s1">&#39;Last Name&#39;</span><span class="p">,</span> <span class="ss">default_order</span><span class="p">:</span> <span class="ss">:desc</span><span class="p">)</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>簡単ですね！</p>
-
-<h3 id="section">まとめ</h3>
-
-<p>いかがでしたか？</p>
-
-<p>大規模なシステムではDBを直接扱う検索は厳しい物がありますが、自作アプリ等小規模開発やハッカソンなど開発スピードが必要な場面ではRansackは素晴らしいソリューションになりえそうですね！</p>
-
-<p>最後にRansackへのリンクです。</p>
-
-<ul>
-  <li><a href="https://github.com/activerecord-hackery/ransack">activerecord-hackery/ransack</a></li>
-  <li><a href="http://ransack-demo.herokuapp.com/">ransack demo</a></li>
-  <li><a href="https://github.com/activerecord-hackery/ransack_demo">ransack demo source</a></li>
-</ul>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/10/23/gem-ransack/">Read on &rarr;</a>
+    </footer>
   
 
 
