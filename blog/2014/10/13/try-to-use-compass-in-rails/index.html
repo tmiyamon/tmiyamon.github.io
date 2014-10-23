@@ -9,8 +9,7 @@
   <meta name="author" content="tmiyamon">
 
   
-  <meta name="description" content="環境 Rails 4.1.4
-Compass 1.0.1 Compass 世の中にはCompassという便利なsass/scssライブラリがあります。 これは何なのかというと、cssを書くときに面倒なvendor prefixやお決まりのパターンをmixin等sass/ &hellip;">
+  <meta name="description" content="環境 Rails 4.1.4 Compass 1.0.1 Compassとは 世の中にはCompassという便利なsass/scssライブラリがあります。 これは何なのかというと、cssを書くときに面倒なvendor prefixやお決まりのパターンをmixin等sass/ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -106,15 +105,14 @@ Compass 1.0.1 Compass 世の中にはCompassという便利なsass/scssライブ
   </header>
 
 
-<div class="entry-content"><h2>環境</h2>
+<div class="entry-content"><h2 id="section">環境</h2>
 
 <ul>
-<li>Rails 4.1.4</li>
-<li>Compass 1.0.1</li>
+  <li>Rails 4.1.4</li>
+  <li>Compass 1.0.1</li>
 </ul>
 
-
-<h2>Compass</h2>
+<h2 id="compass">Compassとは</h2>
 
 <p>世の中には<a href="http://compass-style.org/">Compass</a>という便利なsass/scssライブラリがあります。</p>
 
@@ -122,57 +120,52 @@ Compass 1.0.1 Compass 世の中にはCompassという便利なsass/scssライブ
 
 <p>非常に便利なのでrailsを使うときにはbootstrap, font-awesomeと並んで大体最初から入れているものです（でした）。</p>
 
-<p>今回はflex-boxを使いたくてCompass1.0.1を使おうとしたけれど依存の関係でそう簡単ではない、という話です。</p>
+<p>今回はflex-boxを使いたくてCompass1.0.1を使おうとしたけれど依存の関係でそう簡単ではない、という話です。
+<!-- more --></p>
 
-<!-- more -->
-
-
-<h2>Compass with Rails</h2>
+<h2 id="compass-with-rails">Compass with Rails</h2>
 
 <p>CompassをRailsで使用する際には<a href="https://github.com/Compass/compass-rails">compass-rails</a>を使います。これはCompassをRailsで使用するためのgemですが、簡単にはいきませんでした。</p>
 
-<h3>バージョン指定無し</h3>
+<h3 id="section-1">バージョン指定無し</h3>
 
 <p>通常のgemと同様に</p>
 
-<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;sass-rails&#39;</span>
-</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;compass-rails&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">gem</span> <span class="s1">&#39;sass-rails&#39;</span>
+</span><span class="line"><span class="n">gem</span> <span class="s1">&#39;compass-rails&#39;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>とGemfileに書いて</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle
-</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">bundle
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>でインストールできます。</p>
 
 <p>この際何が問題になるかというと、インストールされるcompassのバージョンが以下の形で解決されてしまうことです。</p>
 
-<figure class='code'><figcaption><span>Gemfile.lock</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">compass</span><span class="o">-</span><span class="n">rails</span> <span class="p">(</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">compass</span> <span class="p">(</span><span class="o">&gt;=</span> <span class="mi">0</span><span class="o">.</span><span class="mi">12</span><span class="o">.</span><span class="mi">2</span><span class="p">)</span>
-</span><span class='line'><span class="n">compass</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">12</span><span class="o">.</span><span class="mi">7</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">sass</span> <span class="p">(</span><span class="o">~&gt;</span> <span class="mi">3</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">19</span><span class="p">)</span>
-</span><span class='line'><span class="n">sass</span><span class="o">-</span><span class="n">rails</span> <span class="p">(</span><span class="mi">4</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">sass</span> <span class="p">(</span><span class="o">~&gt;</span> <span class="mi">3</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="p">)</span>
-</span><span class='line'><span class="n">sass</span> <span class="p">(</span><span class="mi">3</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">19</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Gemfile.lock</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">compass</span><span class="o">-</span><span class="n">rails</span> <span class="p">(</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="p">)</span>
+</span><span class="line">  <span class="n">compass</span> <span class="p">(</span><span class="o">&gt;=</span> <span class="mi">0</span><span class="o">.</span><span class="mi">12</span><span class="o">.</span><span class="mi">2</span><span class="p">)</span>
+</span><span class="line"><span class="n">compass</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">12</span><span class="o">.</span><span class="mi">7</span><span class="p">)</span>
+</span><span class="line">  <span class="n">sass</span> <span class="p">(</span><span class="o">~&gt;</span> <span class="mi">3</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">19</span><span class="p">)</span>
+</span><span class="line"><span class="n">sass</span><span class="o">-</span><span class="n">rails</span> <span class="p">(</span><span class="mi">4</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span><span class="p">)</span>
+</span><span class="line">  <span class="n">sass</span> <span class="p">(</span><span class="o">~&gt;</span> <span class="mi">3</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="p">)</span>
+</span><span class="line"><span class="n">sass</span> <span class="p">(</span><span class="mi">3</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">19</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>最終的にはsassのバージョンが問題（古い）となってcompassが0.12.7までしか入りません。</p>
 
-<h3>バージョン指定 sass-rails</h3>
+<h3 id="sass-rails">バージョン指定 sass-rails</h3>
 
 <p>問題となるgemはsassでそのバージョンを限定しているのはsass-railsです。</p>
 
@@ -180,102 +173,93 @@ Compass 1.0.1 Compass 世の中にはCompassという便利なsass/scssライブ
 
 <p>sass-railsのバージョンは現在5.0.0beta1（！）がリリースされているのでそれで試してみます。</p>
 
-<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;sass-rails&#39;</span><span class="p">,</span> <span class="s1">&#39;5.0.0beta1&#39;</span>
-</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;compass-rails&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">gem</span> <span class="s1">&#39;sass-rails&#39;</span><span class="p">,</span> <span class="s1">&#39;5.0.0beta1&#39;</span>
+</span><span class="line"><span class="n">gem</span> <span class="s1">&#39;compass-rails&#39;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>Gemfileを↑に書き換えて再度bundle。すると以下のエラーを得ます。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>Bundler could not find compatible versions <span class="k">for</span> gem <span class="s2">&quot;sprockets&quot;</span>:
-</span><span class='line'>  In snapshot <span class="o">(</span>Gemfile.lock<span class="o">)</span>:
-</span><span class='line'>    sprockets <span class="o">(</span>2.11.0<span class="o">)</span>
-</span><span class='line'>
-</span><span class='line'>  In Gemfile:
-</span><span class='line'>    sass-rails <span class="o">(=</span> 5.0.0beta1<span class="o">)</span> ruby depends on
-</span><span class='line'>      sprockets <span class="o">(</span>~&gt; 2.12<span class="o">)</span> ruby
-</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">Bundler could not find compatible versions <span class="k">for</span> gem <span class="s2">&quot;sprockets&quot;</span>:
+</span><span class="line">  In snapshot <span class="o">(</span>Gemfile.lock<span class="o">)</span>:
+</span><span class="line">    sprockets <span class="o">(</span>2.11.0<span class="o">)</span>
+</span><span class="line">
+</span><span class="line">  In Gemfile:
+</span><span class="line">    sass-rails <span class="o">(=</span> 5.0.0beta1<span class="o">)</span> ruby depends on
+</span><span class="line">      sprockets <span class="o">(</span>~&gt; 2.12<span class="o">)</span> ruby
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>Gemfile.lockを見ると、 sprocketsが2.11.0で解決されていることが原因のようです。ならばとsprocketsをupdateします。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle update sprockets
-</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">bundle update sprockets
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>これで全ての依存が解決しましたが、Gemfile.lockを覗いてみると肝心のcompassが古いままです。compass-railsも大雑把に指定してくれているのでcompass-railsごとバージョンをあげます。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle update compass-rails
-</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">bundle update compass-rails
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>すると</p>
 
-<figure class='code'><figcaption><span>Gemfile.lock</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">compass</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>                       <span class="o">&lt;-</span> <span class="s1">&#39;!!!!&#39;</span>
-</span><span class='line'>  <span class="n">chunky_png</span> <span class="p">(</span><span class="o">~&gt;</span> <span class="mi">1</span><span class="o">.</span><span class="mi">2</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">compass</span><span class="o">-</span><span class="n">core</span> <span class="p">(</span><span class="o">~&gt;</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">compass</span><span class="o">-</span><span class="n">import</span><span class="o">-</span><span class="n">once</span> <span class="p">(</span><span class="o">~&gt;</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">rb</span><span class="o">-</span><span class="n">fsevent</span> <span class="p">(</span><span class="o">&gt;=</span> <span class="mi">0</span><span class="o">.</span><span class="mi">9</span><span class="o">.</span><span class="mi">3</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">rb</span><span class="o">-</span><span class="n">inotify</span> <span class="p">(</span><span class="o">&gt;=</span> <span class="mi">0</span><span class="o">.</span><span class="mi">9</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">sass</span> <span class="p">(</span><span class="o">&gt;=</span> <span class="mi">3</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">13</span><span class="p">,</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span>
-</span><span class='line'><span class="n">compass</span><span class="o">-</span><span class="n">core</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">multi_json</span> <span class="p">(</span><span class="o">~&gt;</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">sass</span> <span class="p">(</span><span class="o">&gt;=</span> <span class="mi">3</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="p">,</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span>
-</span><span class='line'><span class="n">compass</span><span class="o">-</span><span class="n">import</span><span class="o">-</span><span class="n">once</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">sass</span> <span class="p">(</span><span class="o">&gt;=</span> <span class="mi">3</span><span class="o">.</span><span class="mi">2</span><span class="p">,</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span>
-</span><span class='line'><span class="n">compass</span><span class="o">-</span><span class="n">rails</span> <span class="p">(</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">compass</span> <span class="p">(</span><span class="o">~&gt;</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Gemfile.lock</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">compass</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>                       <span class="o">&lt;-</span> <span class="s1">&#39;!!!!&#39;</span>
+</span><span class="line">  <span class="n">chunky_png</span> <span class="p">(</span><span class="o">~&gt;</span> <span class="mi">1</span><span class="o">.</span><span class="mi">2</span><span class="p">)</span>
+</span><span class="line">  <span class="n">compass</span><span class="o">-</span><span class="n">core</span> <span class="p">(</span><span class="o">~&gt;</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>
+</span><span class="line">  <span class="n">compass</span><span class="o">-</span><span class="n">import</span><span class="o">-</span><span class="n">once</span> <span class="p">(</span><span class="o">~&gt;</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span>
+</span><span class="line">  <span class="n">rb</span><span class="o">-</span><span class="n">fsevent</span> <span class="p">(</span><span class="o">&gt;=</span> <span class="mi">0</span><span class="o">.</span><span class="mi">9</span><span class="o">.</span><span class="mi">3</span><span class="p">)</span>
+</span><span class="line">  <span class="n">rb</span><span class="o">-</span><span class="n">inotify</span> <span class="p">(</span><span class="o">&gt;=</span> <span class="mi">0</span><span class="o">.</span><span class="mi">9</span><span class="p">)</span>
+</span><span class="line">  <span class="n">sass</span> <span class="p">(</span><span class="o">&gt;=</span> <span class="mi">3</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">13</span><span class="p">,</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span>
+</span><span class="line"><span class="n">compass</span><span class="o">-</span><span class="n">core</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>
+</span><span class="line">  <span class="n">multi_json</span> <span class="p">(</span><span class="o">~&gt;</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="p">)</span>
+</span><span class="line">  <span class="n">sass</span> <span class="p">(</span><span class="o">&gt;=</span> <span class="mi">3</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="p">,</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span>
+</span><span class="line"><span class="n">compass</span><span class="o">-</span><span class="n">import</span><span class="o">-</span><span class="n">once</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span>
+</span><span class="line">  <span class="n">sass</span> <span class="p">(</span><span class="o">&gt;=</span> <span class="mi">3</span><span class="o">.</span><span class="mi">2</span><span class="p">,</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span>
+</span><span class="line"><span class="n">compass</span><span class="o">-</span><span class="n">rails</span> <span class="p">(</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>
+</span><span class="line">  <span class="n">compass</span> <span class="p">(</span><span class="o">~&gt;</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
-<p> <strong>来ました！</strong> 目的のcompass1.0.1ですね！</p>
+<p><strong>来ました！</strong> 目的のcompass1.0.1ですね！</p>
 
 <p>sass-railsがbeta1なのが気がかりですが、今のところ動作に問題ないように思います。</p>
 
 <p>今回は比較的小規模なプロジェクトだったのでそこまで大変ではありませんでしたが、大きなプロジェクトではさらに依存解決が大変そうですね。</p>
 
-<h2>まとめ</h2>
+<h2 id="section-2">まとめ</h2>
 
-<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;sass-rails&#39;</span><span class="p">,</span> <span class="s1">&#39;5.0.0beta1&#39;</span>
-</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;compass-rails&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0.1&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">gem</span> <span class="s1">&#39;sass-rails&#39;</span><span class="p">,</span> <span class="s1">&#39;5.0.0beta1&#39;</span>
+</span><span class="line"><span class="n">gem</span> <span class="s1">&#39;compass-rails&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0.1&#39;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">bundle update sprockets
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle update sprockets
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>おまけ</h2>
+<h2 id="section-3">おまけ</h2>
 
 <p>そもそもなぜsass3.3にcompassが依存しているのか、という話です。</p>
 
@@ -285,20 +269,19 @@ Compass 1.0.1 Compass 世の中にはCompassという便利なsass/scssライブ
 
 <p>sassは僕が思っていたよりもよほど構造化できる文法を持っているようですねー</p>
 
-<h2>追記(2014-10-17)</h2>
+<h2 id="section-4">追記(2014-10-17)</h2>
 
 <p>compassを使用するために<a href="https://rails-assets.org/">rails-assets</a>を使う方法もあります。</p>
 
 <p>インストールするには以下の様にGemfileに追加します。使用するためにはsourceも追加する必要があります。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">source</span> <span class="s1">&#39;https://rails-assets.org</span>
-</span><span class='line'>
-</span><span class='line'><span class="s1">gem &#39;</span><span class="n">rails</span><span class="o">-</span><span class="n">assets</span><span class="o">-</span><span class="n">compass</span><span class="o">-</span><span class="n">mixins</span><span class="err">&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">source</span> <span class="s1">&#39;https://rails-assets.org</span>
+</span><span class="line">
+</span><span class="line"><span class="s1">gem &#39;</span><span class="n">rails</span><span class="o">-</span><span class="n">assets</span><span class="o">-</span><span class="n">compass</span><span class="o">-</span><span class="n">mixins</span><span class="err">&#39;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>おそらく依存解決はできるんじゃないでしょうか。</p>
 
@@ -360,6 +343,8 @@ Compass 1.0.1 Compass 世の中にはCompassという便利なsass/scssライブ
         <a class="basic-alignment left" href="/blog/2014/10/09/how-to-start-android-development-with-android-studio/" title="Previous Post: Android StudioによるAndroid開発環境導入">&laquo; Android StudioによるAndroid開発環境導入</a>
       
       
+        <a class="basic-alignment right" href="/blog/2014/10/23/gem-ransack/" title="Next Post: 超簡単に検索機能が作れるgem - Ransack">超簡単に検索機能が作れるgem - Ransack &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -371,6 +356,10 @@ Compass 1.0.1 Compass 世の中にはCompassという便利なsass/scssライブ
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/10/23/gem-ransack/">超簡単に検索機能が作れるgem - Ransack</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/10/13/try-to-use-compass-in-rails/">Compass1.0.1をRails4で使おうとして依存解決の罠にいろいろハマった</a>

@@ -9,10 +9,8 @@
   <meta name="author" content="tmiyamon">
 
   
-  <meta name="description" content="Rails4.1で用意されているcountを操作するメソッドについてまとめた。 以下の形で用意されている。 increment
-increment!
-decrement
-decrement! 概要 modelをinstance化した後使用する。
+  <meta name="description" content="Rails4.1で用意されているcountを操作するメソッドについてまとめた。 以下の形で用意されている。 increment increment! decrement decrement! 概要
+modelをinstance化した後使用する。
 基本的にattributeと差分を指定する。 &hellip;">
   
 
@@ -112,90 +110,81 @@ decrement! 概要 modelをinstance化した後使用する。
 <div class="entry-content"><p>Rails4.1で用意されているcountを操作するメソッドについてまとめた。 以下の形で用意されている。</p>
 
 <ul>
-<li>increment</li>
-<li>increment!</li>
-<li>decrement</li>
-<li>decrement!</li>
+  <li>increment</li>
+  <li>increment!</li>
+  <li>decrement</li>
+  <li>decrement!</li>
 </ul>
 
+<h2 id="section">概要</h2>
+<p>modelをinstance化した後使用する。<br />
+基本的にattributeと差分を指定する。差分のデフォルト値は1。<br />
+incrementだと差分増加、decrementだと差分減少。<br />
+!付きだとsaveする。!無しだとsaveしない。
+<!-- more --></p>
 
-<h2>概要</h2>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">u</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">first</span>
+</span><span class="line"><span class="n">u</span><span class="o">.</span><span class="n">likes_count</span>                <span class="c1"># =&gt; 1 (初期値)</span>
+</span><span class="line">
+</span><span class="line"><span class="n">u</span><span class="o">.</span><span class="n">increment</span> <span class="ss">:likes_count</span><span class="p">,</span> <span class="mi">3</span>
+</span><span class="line"><span class="n">u</span><span class="o">.</span><span class="n">likes_count</span>                <span class="c1"># =&gt; 4</span>
+</span><span class="line"><span class="n">u</span><span class="o">.</span><span class="n">decrement</span> <span class="ss">:likes_count</span><span class="p">,</span> <span class="mi">3</span>
+</span><span class="line"><span class="n">u</span><span class="o">.</span><span class="n">likes_count</span>                <span class="c1"># =&gt; 1</span>
+</span><span class="line">
+</span><span class="line"><span class="n">u</span><span class="o">.</span><span class="n">increment!</span> <span class="ss">:likes_count</span><span class="p">,</span> <span class="mi">3</span>
+</span><span class="line"><span class="no">User</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">likes_count</span>       <span class="c1"># =&gt; 4</span>
+</span><span class="line">
+</span><span class="line"><span class="n">u</span><span class="o">.</span><span class="n">decrement!</span> <span class="ss">:likes_count</span><span class="p">,</span> <span class="mi">3</span>
+</span><span class="line"><span class="no">User</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">likes_count</span>       <span class="c1"># =&gt; 1</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>modelをinstance化した後使用する。
-基本的にattributeと差分を指定する。差分のデフォルト値は1。
-incrementだと差分増加、decrementだと差分減少。
-!付きだとsaveする。!無しだとsaveしない。</p>
-
-<!-- more -->
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">u</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">first</span>
-</span><span class='line'><span class="n">u</span><span class="o">.</span><span class="n">likes_count</span>                <span class="c1"># =&gt; 1 (初期値)</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">u</span><span class="o">.</span><span class="n">increment</span> <span class="ss">:likes_count</span><span class="p">,</span> <span class="mi">3</span>
-</span><span class='line'><span class="n">u</span><span class="o">.</span><span class="n">likes_count</span>                <span class="c1"># =&gt; 4</span>
-</span><span class='line'><span class="n">u</span><span class="o">.</span><span class="n">decrement</span> <span class="ss">:likes_count</span><span class="p">,</span> <span class="mi">3</span>
-</span><span class='line'><span class="n">u</span><span class="o">.</span><span class="n">likes_count</span>                <span class="c1"># =&gt; 1</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">u</span><span class="o">.</span><span class="n">increment!</span> <span class="ss">:likes_count</span><span class="p">,</span> <span class="mi">3</span>
-</span><span class='line'><span class="no">User</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">likes_count</span>       <span class="c1"># =&gt; 4</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">u</span><span class="o">.</span><span class="n">decrement!</span> <span class="ss">:likes_count</span><span class="p">,</span> <span class="mi">3</span>
-</span><span class='line'><span class="no">User</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">likes_count</span>       <span class="c1"># =&gt; 1</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>*(おまけ)counter_cache操作系まとめ</h3>
-
+<h3 id="countercache">*(おまけ)counter_cache操作系まとめ</h3>
 <p>実は上記のincrement!とdecrement!はcounter_cacheのattributeに対しては使用できない。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-</span><span class='line'>  <span class="n">has_many</span> <span class="ss">:likes</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">Like</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:user</span><span class="p">,</span> <span class="ss">counter_cache</span><span class="p">:</span> <span class="kp">true</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">User</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">increment!</span> <span class="ss">:likes_count</span>
-</span><span class='line'><span class="c1"># =&gt; ActiveRecord::ActiveRecordError: likes_count is marked as readonly</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class="line">  <span class="n">has_many</span> <span class="ss">:likes</span>
+</span><span class="line"><span class="k">end</span>
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">Like</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class="line">  <span class="n">belongs_to</span> <span class="ss">:user</span><span class="p">,</span> <span class="ss">counter_cache</span><span class="p">:</span> <span class="kp">true</span>
+</span><span class="line"><span class="k">end</span>
+</span><span class="line">
+</span><span class="line"><span class="no">User</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">increment!</span> <span class="ss">:likes_count</span>
+</span><span class="line"><span class="c1"># =&gt; ActiveRecord::ActiveRecordError: likes_count is marked as readonly</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
-<p>理由は<a href="http://stackoverflow.com/questions/4295404/problem-with-counter-cache-implementation">http://stackoverflow.com/questions/4295404/problem-with-counter-cache-implementation</a></p>
+<p>理由はhttp://stackoverflow.com/questions/4295404/problem-with-counter-cache-implementation</p>
 
 <p>counter_cacheを手動で更新するときは下記メソッドを使用する。</p>
 
 <ul>
-<li>increment_counter</li>
-<li>decremnet_coutner</li>
-<li>update_counters</li>
-<li>reset_counters</li>
+  <li>increment_counter</li>
+  <li>decremnet_coutner</li>
+  <li>update_counters</li>
+  <li>reset_counters</li>
 </ul>
 
 </div>
@@ -256,6 +245,10 @@ incrementだと差分増加、decrementだと差分減少。
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/10/23/gem-ransack/">超簡単に検索機能が作れるgem - Ransack</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/10/13/try-to-use-compass-in-rails/">Compass1.0.1をRails4で使おうとして依存解決の罠にいろいろハマった</a>

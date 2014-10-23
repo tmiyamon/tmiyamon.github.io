@@ -111,8 +111,7 @@
 
 <!-- more -->
 
-
-<h2>Android Studio</h2>
+<h2 id="android-studio">Android Studio</h2>
 
 <p><a href="https://developer.android.com/sdk/installing/studio.html">Android Studio</a>をダウンロードするだけでとりあえずの環境は作れます。</p>
 
@@ -120,7 +119,7 @@
 
 <p>以下は僕が追加で行った設定です。</p>
 
-<h2>JDK設定</h2>
+<h2 id="jdk">JDK設定</h2>
 
 <p>実はAndroid Studioをダウンロードしただけでは起動しませんでした。</p>
 
@@ -130,47 +129,46 @@
 
 <p>Android Studioが持つ設定ファイルのJVMVersionを変更することで起動するようになりました。</p>
 
-<figure class='code'><figcaption><span>/Applications/Android Studio.app/Contents/Info.plist</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'>  <span class="nt">&lt;key&gt;</span>JVMVersion<span class="nt">&lt;/key&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;string&gt;</span>1.6*<span class="nt">&lt;/string&gt;</span>
-</span><span class='line'>
-</span><span class='line'>  ↓
-</span><span class='line'>
-</span><span class='line'>  <span class="nt">&lt;key&gt;</span>JVMVersion<span class="nt">&lt;/key&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;string&gt;</span>1.7*<span class="nt">&lt;/string&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>/Applications/Android Studio.app/Contents/Info.plist</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line">  <span class="nt">&lt;key&gt;</span>JVMVersion<span class="nt">&lt;/key&gt;</span>
+</span><span class="line">  <span class="nt">&lt;string&gt;</span>1.6*<span class="nt">&lt;/string&gt;</span>
+</span><span class="line">
+</span><span class="line">  ↓
+</span><span class="line">
+</span><span class="line">  <span class="nt">&lt;key&gt;</span>JVMVersion<span class="nt">&lt;/key&gt;</span>
+</span><span class="line">  <span class="nt">&lt;string&gt;</span>1.7*<span class="nt">&lt;/string&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
-<h2>外部Android SDKの参照</h2>
+<h2 id="android-sdk">外部Android SDKの参照</h2>
 
 <p>android sdkは上記のAndroid Studioにバンドルされているため別途導入する必要はないのですが、ionic等別環境と同時に使用するときにsdkを共有させたい場合があります。</p>
 
 <p>要するに外部sdkをAndroid Studioから参照するやりかたですね。</p>
 
-<p><img class="left" src="/images/android-studio-menu-close-project.png" width="200" height="200"></p>
+<p><img class="left" src="/images/android-studio-menu-close-project.png" width="200" height="200" /></p>
 
-<p>既にプロジェクトを開いている場合はメニューのFile -> Close Projectから一旦プロジェクトを閉じます。</p>
+<p>既にプロジェクトを開いている場合はメニューのFile -&gt; Close Projectから一旦プロジェクトを閉じます。</p>
 
-<p>Quick Start画面に戻り、Configure -> Project Defaults -> Project Structureの順に辿り、SDK Locationを開きます。ここでプロジェクト作成時のデフォルト設定を行うことができます。</p>
+<p>Quick Start画面に戻り、Configure -&gt; Project Defaults -&gt; Project Structureの順に辿り、SDK Locationを開きます。ここでプロジェクト作成時のデフォルト設定を行うことができます。</p>
 
 <p>ここのAndroid SDK Locationで自分の指定したいsdkのパスを設定します。</p>
 
-<p><img src="/images/android-studio-quickstart.png" width="150" height="150">
-<img src="/images/android-studio-configure.png" width="150" height="150">
-<img src="/images/android-studio-project-defaults.png" width="150" height="150">
-<img src="/images/android-studio-sdk-location.png" width="150" height="150"></p>
+<p><img src="/images/android-studio-quickstart.png" width="150" height="150" />
+<img src="/images/android-studio-configure.png" width="150" height="150" />
+<img src="/images/android-studio-project-defaults.png" width="150" height="150" />
+<img src="/images/android-studio-sdk-location.png" width="150" height="150" /></p>
 
 <p>すでに設定前に作ったプロジェクトに関しては、新しく開いたときに「SDKのバージョンが一致してないけどどうする？」みたいなことを聞かれる（はず）なので適宜ガイドに従えばいけるとおもいます。</p>
 
-<h2>その他</h2>
+<h2 id="section">その他</h2>
 
-<p>プラグインを導入するためにはメニューのAndroid Studio -> Preferences -> Plugins</p>
+<p>プラグインを導入するためにはメニューのAndroid Studio -&gt; Preferences -&gt; Plugins</p>
 </div>
 
 
@@ -235,6 +233,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/10/23/gem-ransack/">超簡単に検索機能が作れるgem - Ransack</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/10/13/try-to-use-compass-in-rails/">Compass1.0.1をRails4で使おうとして依存解決の罠にいろいろハマった</a>

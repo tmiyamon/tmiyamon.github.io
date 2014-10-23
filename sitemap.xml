@@ -3,6 +3,12 @@
   
   
   <url>
+    <loc>http://tmiyamon.github.io/blog/2014/10/23/gem-ransack/</loc>
+    <lastmod>2014-10-23T21:25:59+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://tmiyamon.github.io/blog/2014/10/13/try-to-use-compass-in-rails/</loc>
     <lastmod>2014-10-13T08:35:32+09:00</lastmod>
     <priority>0.8</priority>
@@ -29,14 +35,14 @@
   
   <url>
     <loc>http://tmiyamon.github.io/blog/archives/</loc>
-    <lastmod>2014-10-17T17:27:03+09:00</lastmod>
+    <lastmod>2014-10-23T22:35:22+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://tmiyamon.github.io/</loc>
-    <lastmod>2014-10-17T17:27:03+09:00</lastmod>
+    <lastmod>2014-10-23T22:35:22+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
