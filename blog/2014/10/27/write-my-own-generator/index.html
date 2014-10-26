@@ -1,0 +1,308 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Yeoman自作Generator超入門 - 技術的遊び場</title>
+  <meta name="author" content="tmiyamon">
+
+  
+  <meta name="description" content="Yeomanのgeneratorを自作することでいろんな定形作業を楽にできるかもしれないと思い勉強してみます。 Yeoman Yeomanは一言で言うと、nodeを使ったひな形作成ツールです。 例えばrailsだとrails newするとひな形に従ったディレクトリが構成されますが、 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-site-verification" content="57epThrqLnR6KuzzZGJlKtxWAiGJyTf-qYqv26fme-o" />
+
+  
+  <link rel="canonical" href="http://tmiyamon.github.io/blog/2014/10/27/write-my-own-generator">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="技術的遊び場" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <script src="/javascripts/custom.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-55812786-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">技術的遊び場</a></h1>
+  
+    <h2>.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tmiyamon.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Yeoman自作Generator超入門</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-27T03:21:04+09:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Yeomanのgeneratorを自作することでいろんな定形作業を楽にできるかもしれないと思い勉強してみます。</p>
+
+<h2 id="yeoman">Yeoman</h2>
+
+<p><a href="http://yeoman.io/">Yeoman</a>は一言で言うと、nodeを使ったひな形作成ツールです。</p>
+
+<p>例えばrailsだと<code>rails new</code>するとひな形に従ったディレクトリが構成されますが、それの汎用バージョンだと考えればいいと思います。</p>
+
+<p>Yeomanのひな形定義はgeneratorと呼ばれ、’generator-なんちゃら’の形で作成されています。</p>
+
+<p>有名なのは<a href="https://github.com/yeoman/generator-angular">generator-angular</a>とかでしょうか。</p>
+
+<p><a href="http://gruntjs.com/">Grunt</a>や<a href="http://gruntjs.com/">Gulp</a>といったTask Runnerを組み合わせて生成するgeneratorが多いように見受けられますが、Yeoman自体はそれらとは独立しているので単純にあるプロジェクトを構成するgeneratorを作成こともできます。</p>
+
+<p>今回はgeneratorを自作することで定形作業を楽にできないか、といモチベーションのもとgenerator自作にチャレンジしてみます。</p>
+
+<h2 id="getting-started">Getting Started</h2>
+
+<p>Yeomanのgeneratorの自作方法は<a href="http://yeoman.io/authoring/">WRITING YOUR OWN YEOMAN GENERATOR</a>に紹介されていますが、generatorを作成するgeneratorである<a href="https://github.com/yeoman/generator-generator">generator-generator</a>が存在します（generator多い！）。今回はこれを使いたいと思います。</p>
+
+<p>また、generatorを実行するためにはYeomanが必要です。Yeomanを実行するためにはnodeが必要です。</p>
+
+<p>僕のローカル環境にnodeが入っていなかったため、nodeを管理するnvmを入れるところから入ります。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">curl https://raw.githubusercontent.com/creationix/nvm/v0.17.3/install.sh <span class="p">|</span> bash
+</span><span class="line"><span class="nb">echo</span> <span class="s1">&#39;[[ -s $HOME/.nvm/nvm.sh ]] &amp;&amp; source $HOME/.nvm/nvm.sh&#39;</span> &gt;&gt; ~/.bashrc
+</span><span class="line"><span class="nb">source</span> ~/.bashrc
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>ここではbashですがzshでもいけるはずです。</p>
+
+<p>入れるnodeはhttp://nodejs.jp/を見て安定版となっているバージョンを入れました。<br />
+さらにデフォルトで使用するバージョンとして今入れたバージョンを指定します。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">nvm install v0.10.26
+</span><span class="line">nvm <span class="nb">alias </span>default 0.10.26
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>さて、nodeの準備が整ったところでもろもろをインストールします。Yeomanや各種generatorはnodeのパッケージ管理ツールであるnpmのパッケージとして公開されているので、<code>npm install</code>でインストールします。npm自体はnvmがnodeをインストールした時に一緒にインストールしてくれているはずです。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">npm install -g yo
+</span><span class="line">npm install -g generator-generator
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>ここまででgeneratorを作成する準備は整いました。ではgeneratorを作成してみましょう。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">mkdir generator-sample
+</span><span class="line"><span class="nb">cd</span> !<span class="err">$</span>
+</span><span class="line">yo generator
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Yeomanでgeneratorを実行するとき、’generator-なんちゃら’の’なんちゃら’の部分を引数として指定します。今回実行したいのはgenerator-generatorなのでgeneratorを指定します（ややこしい！）。先の例であったgenerator-angularの場合は<code>yo angular</code>ですね。</p>
+
+<p><code>yo generator</code>を実行すると対話状態になり、聞かれるままに答えていくと対話状態が終了し、必要なライブラリがインストールされます。これでgeneratorのひな形が完成しました。超簡単ですね。</p>
+
+<p>次はいよいよgeneratorをいじっていきます。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">tmiyamon</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-27T03:21:04+09:00" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/yeoman/'>yeoman</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  <a href="http://b.hatena.ne.jp/entry/http://tmiyamon.github.io/blog/2014/10/27/write-my-own-generator/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://tmiyamon.github.io/blog/2014/10/27/write-my-own-generator/" data-via="" data-counturl="http://tmiyamon.github.io/blog/2014/10/27/write-my-own-generator/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/10/23/gem-ransack/" title="Previous Post: 超簡単に検索機能が作れるgem - Ransack">&laquo; 超簡単に検索機能が作れるgem - Ransack</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/10/27/write-my-own-generator/">Yeoman自作Generator超入門</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/23/gem-ransack/">超簡単に検索機能が作れるgem - Ransack</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/13/try-to-use-compass-in-rails/">Compass1.0.1をRails4で使おうとして依存解決の罠にいろいろハマった</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/09/how-to-start-android-development-with-android-studio/">Android StudioによるAndroid開発環境導入</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/13/rails-counter-methods/">Rails4.1のCount(数値増減)操作系メソッドまとめ</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - tmiyamon -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
