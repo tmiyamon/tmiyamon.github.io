@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Compass - 技術的遊び場</title>
+  <title>Category: Compass - 上澄み20%</title>
   <meta name="author" content="tmiyamon">
 
   
@@ -22,7 +22,7 @@
   <link rel="canonical" href="http://tmiyamon.github.io/blog/categories/compass">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="技術的遊び場" type="application/atom+xml">
+  <link href="/atom.xml" rel="alternate" title="上澄み20%" type="application/atom+xml">
   <script src="/javascripts/modernizr-2.0.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
@@ -50,9 +50,7 @@
 
 <body   >
   <header role="banner"><hgroup>
-  <h1><a href="/">技術的遊び場</a></h1>
-  
-    <h2>.</h2>
+  <h1><a href="/">上澄み20%</a></h1>
   
 </hgroup>
 
@@ -118,7 +116,11 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/10/27/write-my-own-generator/">Yeoman自作Generator超入門</a>
+        <a href="/blog/2014/11/10/write-my-own-generator-2/">YeomanのGeneratorを自作して作業効率を上げる！(2)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/27/write-my-own-generator/">YeomanのGeneratorを自作して作業効率を上げる！</a>
       </li>
     
       <li class="post">
@@ -133,11 +135,36 @@
         <a href="/blog/2014/10/09/how-to-start-android-development-with-android-studio/">Android StudioによるAndroid開発環境導入</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/08/13/rails-counter-methods/">Rails4.1のCount(数値増減)操作系メソッドまとめ</a>
-      </li>
-    
   </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/tmiyamon">@tmiyamon</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'tmiyamon',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
 </section>
 
 
