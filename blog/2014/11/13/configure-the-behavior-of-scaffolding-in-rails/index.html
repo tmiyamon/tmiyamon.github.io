@@ -1,0 +1,583 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Railsのgenerateコマンドを俺好みに設定する - 上澄み20%</title>
+  <meta name="author" content="tmiyamon">
+
+  
+  <meta name="description" content="Railsのscaffold便利ですよね。コマンド一発でrestfulな構造を作ってくれます。
+しかしデフォルトではテストフレームワークがtest unitであったり、cssやjsを逐一作ったり、と場合によっては抑制したい挙動もあります。 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-site-verification" content="57epThrqLnR6KuzzZGJlKtxWAiGJyTf-qYqv26fme-o" />
+
+  
+  <link rel="canonical" href="http://tmiyamon.github.io/blog/2014/11/13/configure-the-behavior-of-scaffolding-in-rails">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="上澄み20%" type="application/atom+xml">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <script src="/javascripts/custom.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-55812786-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">上澄み20%</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+<div class="nav-tool">
+  
+    <form action="https://www.google.com/search" method="get">
+      <fieldset role="search">
+        <input type="hidden" name="q" value="site:tmiyamon.github.io" />
+        <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+      </fieldset>
+    </form>
+  
+  <ul class="subscription" data-subscription="rss">
+    <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS" data-navtext="RSS"><i class="fa fa-rss"></i></a></li>
+    
+  </ul>
+</div>
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Railsのgenerateコマンドを俺好みに設定する</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-13T13:45:10+09:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Railsのscaffold便利ですよね。コマンド一発でrestfulな構造を作ってくれます。<br />
+しかしデフォルトではテストフレームワークがtest unitであったり、cssやjsを逐一作ったり、と場合によっては抑制したい挙動もあります。<br />
+実はこのscaffoldはユーザがカスタマイズすることができます。更にいうとscaffoldだけではなくgenerateコマンド全般に対して設定できます。<br />
+今回はgenerateコマンドの設定方法を見ていきます。</p>
+
+<!-- More -->
+
+<h3 id="scaffold">Scaffoldの設定方法</h3>
+
+<p>generateコマンドの挙動は<code>config/application.rb</code>で設定することができます。<br />
+例えば、こんな感じです。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">class</span> <span class="nc">Application</span> <span class="o">&lt;</span> <span class="no">Rails</span><span class="o">::</span><span class="no">Application</span>
+</span><span class="line">  <span class="n">config</span><span class="o">.</span><span class="n">generators</span> <span class="k">do</span> <span class="o">|</span><span class="n">g</span><span class="o">|</span>
+</span><span class="line">    <span class="n">g</span><span class="o">.</span><span class="n">helper</span> <span class="kp">false</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line"><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>これはController生成時にhelperを作らない、という設定です。<br />
+この設定のgenerateを未設定時とくらべてみます。</p>
+
+<p>未設定時</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">% bundle <span class="nb">exec </span>rails g controller product
+</span><span class="line">      create  app/controllers/product_controller.rb
+</span><span class="line">      invoke  slim
+</span><span class="line">      create    app/views/product
+</span><span class="line">      invoke  test_unit
+</span><span class="line">      create    <span class="nb">test</span>/controllers/product_controller_test.rb
+</span><span class="line">      invoke  helper
+</span><span class="line">      create    app/helpers/product_helper.rb
+</span><span class="line">      invoke    test_unit
+</span><span class="line">      create      <span class="nb">test</span>/helpers/product_helper_test.rb
+</span><span class="line">      invoke  assets
+</span><span class="line">      invoke    coffee
+</span><span class="line">      create      app/assets/javascripts/product.js.coffee
+</span><span class="line">      invoke    scss
+</span><span class="line">      create      app/assets/stylesheets/product.css.scss
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>設定時</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">% bundle <span class="nb">exec </span>rails g controller product
+</span><span class="line">      create  app/controllers/product_controller.rb
+</span><span class="line">      invoke  slim
+</span><span class="line">      create    app/views/product
+</span><span class="line">      invoke  test_unit
+</span><span class="line">      create    <span class="nb">test</span>/controllers/product_controller_test.rb
+</span><span class="line">      invoke  assets
+</span><span class="line">      invoke    coffee
+</span><span class="line">      create      app/assets/javascripts/product.js.coffee
+</span><span class="line">      invoke    scss
+</span><span class="line">      create      app/assets/stylesheets/product.css.scss
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>いかがでしょうか？設定時にはhelperの生成がなくなっているのがわかりますね。<br />
+こんな感じで自分に適したgeneratorコマンドを設定することができます。</p>
+
+<p>では何を設定していいかはどこからわかるのでしょうか？<br />
+実はここで設定しているのは<code>g scaffold</code>で指定できるオプションなのです。
+<code>g scaffold</code>のオプションを見てみましょう。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+<span class="line-number">43</span>
+<span class="line-number">44</span>
+<span class="line-number">45</span>
+<span class="line-number">46</span>
+<span class="line-number">47</span>
+<span class="line-number">48</span>
+<span class="line-number">49</span>
+<span class="line-number">50</span>
+<span class="line-number">51</span>
+<span class="line-number">52</span>
+<span class="line-number">53</span>
+<span class="line-number">54</span>
+<span class="line-number">55</span>
+<span class="line-number">56</span>
+<span class="line-number">57</span>
+<span class="line-number">58</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">% bundle <span class="nb">exec </span>rails g scaffold
+</span><span class="line">Usage:
+</span><span class="line">  rails generate scaffold NAME <span class="o">[</span>field<span class="o">[</span>:type<span class="o">][</span>:index<span class="o">]</span> field<span class="o">[</span>:type<span class="o">][</span>:index<span class="o">]]</span> <span class="o">[</span>options<span class="o">]</span>
+</span><span class="line">
+</span><span class="line">Options:
+</span><span class="line">      <span class="o">[</span>--skip-namespace<span class="o">]</span>, <span class="o">[</span>--no-skip-namespace<span class="o">]</span>  <span class="c"># Skip namespace (affects only isolated applications)</span>
+</span><span class="line">  -o, --orm<span class="o">=</span>NAME                                 <span class="c"># Orm to be invoked</span>
+</span><span class="line">                                                 <span class="c"># Default: active_record</span>
+</span><span class="line">      <span class="o">[</span>--force-plural<span class="o">]</span>, <span class="o">[</span>--no-force-plural<span class="o">]</span>      <span class="c"># Forces the use of a plural ModelName</span>
+</span><span class="line">      <span class="o">[</span>--model-name<span class="o">=</span>MODEL_NAME<span class="o">]</span>                  <span class="c"># ModelName to be used</span>
+</span><span class="line">      <span class="o">[</span>--resource-route<span class="o">]</span>, <span class="o">[</span>--no-resource-route<span class="o">]</span>  <span class="c"># Indicates when to generate resource route</span>
+</span><span class="line">                                                 <span class="c"># Default: true</span>
+</span><span class="line">  -y, <span class="o">[</span>--stylesheets<span class="o">]</span>, <span class="o">[</span>--no-stylesheets<span class="o">]</span>        <span class="c"># Generate Stylesheets</span>
+</span><span class="line">                                                 <span class="c"># Default: true</span>
+</span><span class="line">  -se, <span class="o">[</span>--stylesheet-engine<span class="o">=</span>STYLESHEET_ENGINE<span class="o">]</span>   <span class="c"># Engine for Stylesheets</span>
+</span><span class="line">                                                 <span class="c"># Default: scss</span>
+</span><span class="line">      <span class="o">[</span>--assets<span class="o">]</span>, <span class="o">[</span>--no-assets<span class="o">]</span>                  <span class="c"># Indicates when to generate assets</span>
+</span><span class="line">                                                 <span class="c"># Default: true</span>
+</span><span class="line">  -c, --scaffold-controller<span class="o">=</span>NAME                 <span class="c"># Scaffold controller to be invoked</span>
+</span><span class="line">                                                 <span class="c"># Default: scaffold_controller</span>
+</span><span class="line">
+</span><span class="line">ActiveRecord options:
+</span><span class="line">      <span class="o">[</span>--migration<span class="o">]</span>, <span class="o">[</span>--no-migration<span class="o">]</span>    <span class="c"># Indicates when to generate migration</span>
+</span><span class="line">                                         <span class="c"># Default: true</span>
+</span><span class="line">      <span class="o">[</span>--timestamps<span class="o">]</span>, <span class="o">[</span>--no-timestamps<span class="o">]</span>  <span class="c"># Indicates when to generate timestamps</span>
+</span><span class="line">                                         <span class="c"># Default: true</span>
+</span><span class="line">      <span class="o">[</span>--parent<span class="o">=</span>PARENT<span class="o">]</span>                  <span class="c"># The parent class for the generated model</span>
+</span><span class="line">      <span class="o">[</span>--indexes<span class="o">]</span>, <span class="o">[</span>--no-indexes<span class="o">]</span>        <span class="c"># Add indexes for references and belongs_to columns</span>
+</span><span class="line">                                         <span class="c"># Default: true</span>
+</span><span class="line">  -t, <span class="o">[</span>--test-framework<span class="o">=</span>NAME<span class="o">]</span>            <span class="c"># Test framework to be invoked</span>
+</span><span class="line">                                         <span class="c"># Default: test_unit</span>
+</span><span class="line">
+</span><span class="line">TestUnit options:
+</span><span class="line">      <span class="o">[</span>--fixture<span class="o">]</span>, <span class="o">[</span>--no-fixture<span class="o">]</span>   <span class="c"># Indicates when to generate fixture</span>
+</span><span class="line">                                    <span class="c"># Default: true</span>
+</span><span class="line">  -r, <span class="o">[</span>--fixture-replacement<span class="o">=</span>NAME<span class="o">]</span>  <span class="c"># Fixture replacement to be invoked</span>
+</span><span class="line">
+</span><span class="line">ScaffoldController options:
+</span><span class="line">  -e, <span class="o">[</span>--template-engine<span class="o">=</span>NAME<span class="o">]</span>  <span class="c"># Template engine to be invoked</span>
+</span><span class="line">                                <span class="c"># Default: slim</span>
+</span><span class="line">      <span class="o">[</span>--helper<span class="o">]</span>                <span class="c"># Indicates when to generate helper</span>
+</span><span class="line">      <span class="o">[</span>--jbuilder<span class="o">]</span>              <span class="c"># Indicates when to generate jbuilder</span>
+</span><span class="line">                                <span class="c"># Default: true</span>
+</span><span class="line">
+</span><span class="line">Slim options:
+</span><span class="line">  <span class="o">[</span>--form-builder<span class="o">=</span>NAME<span class="o">]</span>  <span class="c"># Form builder to be invoked</span>
+</span><span class="line">
+</span><span class="line">Asset options:
+</span><span class="line">  -j, <span class="o">[</span>--javascripts<span class="o">]</span>, <span class="o">[</span>--no-javascripts<span class="o">]</span>       <span class="c"># Generate JavaScripts</span>
+</span><span class="line">                                                <span class="c"># Default: true</span>
+</span><span class="line">  -je, <span class="o">[</span>--javascript-engine<span class="o">=</span>JAVASCRIPT_ENGINE<span class="o">]</span>  <span class="c"># Engine for JavaScripts</span>
+</span><span class="line">                                                <span class="c"># Default: coffee</span>
+</span><span class="line">
+</span><span class="line">Runtime options:
+</span><span class="line">  -f, <span class="o">[</span>--force<span class="o">]</span>                    <span class="c"># Overwrite files that already exist</span>
+</span><span class="line">  -p, <span class="o">[</span>--pretend<span class="o">]</span>, <span class="o">[</span>--no-pretend<span class="o">]</span>  <span class="c"># Run but do not make any changes</span>
+</span><span class="line">  -q, <span class="o">[</span>--quiet<span class="o">]</span>, <span class="o">[</span>--no-quiet<span class="o">]</span>      <span class="c"># Suppress status output</span>
+</span><span class="line">  -s, <span class="o">[</span>--skip<span class="o">]</span>, <span class="o">[</span>--no-skip<span class="o">]</span>        <span class="c"># Skip files that already exist</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>ここではTestUnitのオプションが表示されていますが、<code>config/applcation.rb</code>で</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">class Application &lt; Rails::Application
+</span><span class="line">  config.generators <span class="k">do</span> <span class="p">|</span>g<span class="p">|</span>
+</span><span class="line">    g.test_framework :rspec
+</span><span class="line">  end
+</span><span class="line">end
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>とテストフレームワークを指定してやると、Rspecのオプションが表示されるようになります。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">Rspec options:
+</span><span class="line">  <span class="o">[</span>--fixture<span class="o">]</span>, <span class="o">[</span>--no-fixture<span class="o">]</span>                    <span class="c"># Indicates when to generate fixture</span>
+</span><span class="line">  <span class="o">[</span>--fixture-replacement<span class="o">=</span>NAME<span class="o">]</span>                   <span class="c"># Fixture replacement to be invoked</span>
+</span><span class="line">  <span class="o">[</span>--singleton<span class="o">]</span>, <span class="o">[</span>--no-singleton<span class="o">]</span>                <span class="c"># Supply to create a singleton controller</span>
+</span><span class="line">  <span class="o">[</span>--controller-specs<span class="o">]</span>, <span class="o">[</span>--no-controller-specs<span class="o">]</span>  <span class="c"># Generate controller specs</span>
+</span><span class="line">                                                 <span class="c"># Default: true</span>
+</span><span class="line">  <span class="o">[</span>--view-specs<span class="o">]</span>, <span class="o">[</span>--no-view-specs<span class="o">]</span>              <span class="c"># Generate view specs</span>
+</span><span class="line">                                                 <span class="c"># Default: true</span>
+</span><span class="line">  <span class="o">[</span>--helper-specs<span class="o">]</span>, <span class="o">[</span>--no-helper-specs<span class="o">]</span>          <span class="c"># Generate helper specs</span>
+</span><span class="line">                                                 <span class="c"># Default: true</span>
+</span><span class="line">  <span class="o">[</span>--routing-specs<span class="o">]</span>, <span class="o">[</span>--no-routing-specs<span class="o">]</span>        <span class="c"># Generate routing specs</span>
+</span><span class="line">                                                 <span class="c"># Default: true</span>
+</span><span class="line">  <span class="o">[</span>--integration-tool<span class="o">=</span>NAME<span class="o">]</span>                      <span class="c"># Integration tool to be invoked</span>
+</span><span class="line">                                                 <span class="c"># Default: test_unit</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>これらのオプションから自分の好きなようにgeneratorコマンドをカスタマイズしていきましょう。</p>
+
+<h3 id="section">オレオレ設定</h3>
+
+<p>僕が普段使っている設定はこんな感じです。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">class</span> <span class="nc">Application</span> <span class="o">&lt;</span> <span class="no">Rails</span><span class="o">::</span><span class="no">Application</span>
+</span><span class="line">  <span class="n">config</span><span class="o">.</span><span class="n">generators</span> <span class="k">do</span> <span class="o">|</span><span class="n">g</span><span class="o">|</span>
+</span><span class="line">    <span class="n">g</span><span class="o">.</span><span class="n">orm</span> <span class="ss">:active_record</span>
+</span><span class="line">    <span class="n">g</span><span class="o">.</span><span class="n">assets</span> <span class="kp">false</span>
+</span><span class="line">    <span class="n">g</span><span class="o">.</span><span class="n">helper</span> <span class="kp">false</span>
+</span><span class="line">    <span class="n">g</span><span class="o">.</span><span class="n">test_framework</span> <span class="ss">:rspec</span><span class="p">,</span>
+</span><span class="line">      <span class="ss">fixture</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span>
+</span><span class="line">      <span class="ss">fixture_replacement</span><span class="p">:</span> <span class="ss">:factory_girl</span><span class="p">,</span>
+</span><span class="line">      <span class="ss">view_specs</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span>
+</span><span class="line">      <span class="ss">routing_specs</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span>
+</span><span class="line">      <span class="ss">helper_specs</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span>
+</span><span class="line">      <span class="ss">integration_tool</span><span class="p">:</span> <span class="kp">false</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line"><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>ご覧のとおり、</p>
+
+<ul>
+  <li>css, jsは生成しない</li>
+  <li>helperは生成しない</li>
+  <li>テストフレームワークはrspec
+    <ul>
+      <li>fixtureはFactoryGirl</li>
+      <li>view, routing, helper, integrationテストは生成しない</li>
+    </ul>
+  </li>
+</ul>
+
+<p>という設定になっています。</p>
+
+<p>自分の思い通りのgeneratorコマンドはストレスがなくてオススメですよ！</p>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">tmiyamon</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-13T13:45:10+09:00" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/rails/'>rails</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  <a href="http://b.hatena.ne.jp/entry/http://tmiyamon.github.io/blog/2014/11/13/configure-the-behavior-of-scaffolding-in-rails/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://tmiyamon.github.io/blog/2014/11/13/configure-the-behavior-of-scaffolding-in-rails/" data-via="tmiyamon" data-counturl="http://tmiyamon.github.io/blog/2014/11/13/configure-the-behavior-of-scaffolding-in-rails/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/11/10/write-my-own-generator-2/" title="Previous Post: YeomanのGeneratorを自作して作業効率を上げる！(2)">&laquo; YeomanのGeneratorを自作して作業効率を上げる！(2)</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/11/13/configure-the-behavior-of-scaffolding-in-rails/">Railsのgenerateコマンドを俺好みに設定する</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/10/write-my-own-generator-2/">YeomanのGeneratorを自作して作業効率を上げる！(2)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/27/write-my-own-generator/">YeomanのGeneratorを自作して作業効率を上げる！</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/23/gem-ransack/">超簡単に検索機能が作れるgem - Ransack</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/13/try-to-use-compass-in-rails/">Compass1.0.1をRails4で使おうとして依存解決の罠にいろいろハマった</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/tmiyamon">@tmiyamon</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'tmiyamon',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - tmiyamon -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
