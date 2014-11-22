@@ -5,11 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>YeomanのGeneratorを自作して作業効率を上げる！ - 上澄み20%</title>
+  <title>Docpad Pluginの作成を簡単にするYeoman Generatorを作った - 上澄み20%</title>
   <meta name="author" content="tmiyamon">
 
   
-  <meta name="description" content="Yeomanのgeneratorを自作することで、いろんな定形作業を楽にできるかもしれないと思い勉強してみます。 Yeoman Yeomanは一言で言うと、nodeを使ったひな形作成ツールです。 例えばrailsだとrails newするとひな形に従ったディレクトリが構成されますが、 &hellip;">
+  <meta name="description" content="DocPadというプロダクトをご存知でしょうか？
+いわゆる静的サイトジェネレータの一種で、JekyllやOctopressと同レイヤーのプロダクトに当たります。
+nodeを使用していて、大量のプラグインが既に存在し、様々なスケルトンや言語を用いることができます。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +21,7 @@
   <meta name="google-site-verification" content="57epThrqLnR6KuzzZGJlKtxWAiGJyTf-qYqv26fme-o" />
 
   
-  <link rel="canonical" href="http://tmiyamon.github.io/blog/2014/10/27/write-my-own-generator">
+  <link rel="canonical" href="http://tmiyamon.github.io/blog/2014/11/22/generator-docpad-plugin">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="上澄み20%" type="application/atom+xml">
@@ -82,7 +84,7 @@
   
   <header>
     
-      <h1 class="entry-title">YeomanのGeneratorを自作して作業効率を上げる！</h1>
+      <h1 class="entry-title">Docpad Pluginの作成を簡単にするYeoman Generatorを作った</h1>
     
     
       <p class="meta">
@@ -98,88 +100,60 @@
   
 
 
-<time datetime="2014-10-27T03:21:04+09:00" pubdate data-updated="true"></time>
+<time datetime="2014-11-22T09:30:23+09:00" pubdate data-updated="true"></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Yeomanのgeneratorを自作することで、いろんな定形作業を楽にできるかもしれないと思い勉強してみます。</p>
+<div class="entry-content"><p><img src="/images/docpad-youtube.gif" alt="docpad" /></p>
+
+<p><a href="https://docpad.org/">DocPad</a>というプロダクトをご存知でしょうか？<br />
+いわゆる静的サイトジェネレータの一種で、JekyllやOctopressと同レイヤーのプロダクトに当たります。<br />
+nodeを使用していて、<a href="https://docpad.org/docs/plugins">大量のプラグイン</a>が既に存在し、様々なスケルトンや言語を用いることができます。<br />
+今回はこのDocPadのPluginのひな形を作るGeneratorを作成しました。</p>
+
+<p>レポジトリは<a href="https://github.com/tmiyamon/generator-docpad-plugin">こちら</a>です。</p>
 
 <!-- More -->
 
-<h3 id="yeoman">Yeoman</h3>
+<h2 id="section">インストール</h2>
 
-<p><a href="http://yeoman.io/">Yeoman</a>は一言で言うと、nodeを使ったひな形作成ツールです。</p>
+<p>通常のgeneratorと同じようにnpmでインストールします。</p>
 
-<p>例えばrailsだと<code>rails new</code>するとひな形に従ったディレクトリが構成されますが、それの汎用バージョンだと考えればいいと思います。</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">npm install -g generator-docpad-plugin
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>Yeomanのひな形定義はgeneratorと呼ばれ、’generator-なんちゃら’の形で作成されています。</p>
+<p><a href="/blog/2014/10/27/write-my-own-generator/">以前の投稿</a>で触れたように、Yeomanのgeneratorは<code>generator-なんちゃら</code>の名前になっています。</p>
 
-<p>有名なのは<a href="https://github.com/yeoman/generator-angular">generator-angular</a>とかでしょうか。</p>
-
-<p><a href="http://gruntjs.com/">Grunt</a>や<a href="http://gruntjs.com/">Gulp</a>といったTask Runnerを組み合わせて生成するgeneratorが多いように見受けられますが、Yeoman自体はそれらとは独立しているので単純にあるプロジェクトを構成するgeneratorを作成こともできます。</p>
-
-<p>今回はgeneratorを自作することで定形作業を楽にできないか、といモチベーションのもとgenerator自作にチャレンジしてみます。</p>
-
-<h3 id="getting-started">Getting Started</h3>
-
-<p>Yeomanのgeneratorの自作方法は<a href="http://yeoman.io/authoring/">WRITING YOUR OWN YEOMAN GENERATOR</a>に紹介されていますが、generatorを作成するgeneratorである<a href="https://github.com/yeoman/generator-generator">generator-generator</a>が存在します（generator多い！）。今回はこれを使いたいと思います。</p>
-
-<p>また、generatorを実行するためにはYeomanが必要です。Yeomanを実行するためにはnodeが必要です。</p>
-
-<h4 id="install-nvm">Install nvm</h4>
-
-<p>僕のローカル環境にnodeが入っていなかったため、nodeを管理するnvmを入れるところから入ります。</p>
+<h2 id="section-1">使い方</h2>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">curl https://raw.githubusercontent.com/creationix/nvm/v0.17.3/install.sh <span class="p">|</span> bash
-</span><span class="line"><span class="nb">echo</span> <span class="s1">&#39;[[ -s $HOME/.nvm/nvm.sh ]] &amp;&amp; source $HOME/.nvm/nvm.sh&#39;</span> &gt;&gt; ~/.bashrc
-</span><span class="line"><span class="nb">source</span> ~/.bashrc
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>ここではbashですがzshでもいけるはずです。</p>
-
-<p>入れるnodeはhttp://nodejs.jp/を見て安定版となっているバージョンを入れました。<br />
-さらにデフォルトで使用するバージョンとして今入れたバージョンを指定します。</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">nvm install v0.10.26
-</span><span class="line">nvm <span class="nb">alias </span>default 0.10.26
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<h4 id="install-yeoman">Install Yeoman</h4>
-
-<p>さて、nodeの準備が整ったところでもろもろをインストールします。Yeomanや各種generatorはnodeのパッケージ管理ツールであるnpmのパッケージとして公開されているので、<code>npm install</code>でインストールします。npm自体はnvmがnodeをインストールした時に一緒にインストールしてくれているはずです。</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">npm install -g yo
-</span><span class="line">npm install -g generator-generator
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>ここまででgeneratorを作成する準備は整いました。ではgeneratorを作成してみましょう。</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">mkdir generator-sample
+</pre></td><td class="code"><pre><code class="bash"><span class="line">mkdir docpad-plguin-yourplugin
 </span><span class="line"><span class="nb">cd</span> !<span class="err">$</span>
-</span><span class="line">yo generator
+</span><span class="line">yo docpad-plugin
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>Yeomanでgeneratorを実行するとき、’generator-なんちゃら’の’なんちゃら’の部分を引数として指定します。今回実行したいのはgenerator-generatorなのでgeneratorを指定します（ややこしい！）。先の例であったgenerator-angularの場合は<code>yo angular</code>ですね。</p>
+<p>上記コマンドを実行すると、yourpluginがプラグイン名として認識されます。<br />
+DocPadのプラグイン名は<code>docpad-plugin-なんちゃら</code>と決まっていて、かつ<code>なんちゃら</code>の部分はハイフン等記号を入れないことが推奨されているようです。</p>
 
-<p><code>yo generator</code>を実行すると対話状態になり、聞かれるままに答えていくと対話状態が終了し、必要なライブラリがインストールされます。<br />
-今回はpackage名をsampleとしておきます。</p>
+<p>以上でサンプルのプラグインが生成されるはずです。<br />
+あとは自由に改変してプラグインを作っていきましょう。</p>
 
-<p>これでgeneratorのひな形が完成しました。超簡単ですね。</p>
+<h2 id="section-2">作った理由</h2>
 
-<p>次はいよいよgeneratorを弄っていきます。</p>
+<p>余談ですが、作った理由についてです。<br />
+DocPadはJekyllのようにブログに特化しているわけではないので、ブログ用のコマンドは用意されていません。<br />
+幸いDocPadのコマンドはプラグインによって拡張できるので、DocPadプラグイン作成に挑戦。。したかったのですが、そもそもPluginの作り方がよくわからない。</p>
+
+<p>モチベーションがあるのにこういう部分で躓くのは勿体無いと思い、まずはDocPadのPluginのひな形を作るYeoman Generatorを作成しました。<br />
+これによりプラグイン作成の敷居を下げることに貢献できればと思います。<br />
+また、これからDocPadに興味を持ってPlugInを作る人達の役に立てれば幸いです。</p>
+
 </div>
 
 
@@ -202,12 +176,12 @@
   
 
 
-<time datetime="2014-10-27T03:21:04+09:00" pubdate data-updated="true"></time>
+<time datetime="2014-11-22T09:30:23+09:00" pubdate data-updated="true"></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/generator/'>generator</a>, <a class='category' href='/blog/categories/yeoman/'>yeoman</a>
+    <a class='category' href='/blog/categories/docpad/'>docpad</a>, <a class='category' href='/blog/categories/plugin/'>plugin</a>, <a class='category' href='/blog/categories/yeoman/'>yeoman</a>
   
 </span>
 
@@ -215,9 +189,9 @@
     </p>
     
       <div class="sharing">
-  <a href="http://b.hatena.ne.jp/entry/http://tmiyamon.github.io/blog/2014/10/27/write-my-own-generator/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  <a href="http://b.hatena.ne.jp/entry/http://tmiyamon.github.io/blog/2014/11/22/generator-docpad-plugin/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://tmiyamon.github.io/blog/2014/10/27/write-my-own-generator/" data-via="tmiyamon" data-counturl="http://tmiyamon.github.io/blog/2014/10/27/write-my-own-generator/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://tmiyamon.github.io/blog/2014/11/22/generator-docpad-plugin/" data-via="tmiyamon" data-counturl="http://tmiyamon.github.io/blog/2014/11/22/generator-docpad-plugin/" >Tweet</a>
   
   
   
@@ -228,15 +202,10 @@
     
     <p class="meta nav-posts">
       
-        <a class="basic-alignment left" href="/blog/2014/10/23/gem-ransack/" title="Previous Post: 超簡単に検索機能が作れるgem - Ransack">
-          <i class="fa fa-angle-left fa-fw"></i>超簡単に検索機能が作れるgem - Ransack
+        <a class="basic-alignment left" href="/blog/2014/11/17/hackathon-techcrunch2014/" title="Previous Post: Techcrunch2014ハッカソンに参加してきた">
+          <i class="fa fa-angle-left fa-fw"></i>Techcrunch2014ハッカソンに参加してきた
         </a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/11/10/write-my-own-generator-2/" title="Next Post: YeomanのGeneratorを自作して作業効率を上げる！(2)">
-          YeomanのGeneratorを自作して作業効率を上げる！(2)
-          <i class="fa fa-angle-right fa-fw"></i>
-        </a>
       
     </p>
   </footer>
@@ -331,8 +300,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://tmiyamon.github.io/blog/2014/10/27/write-my-own-generator/';
-        var disqus_url = 'http://tmiyamon.github.io/blog/2014/10/27/write-my-own-generator/';
+        var disqus_identifier = 'http://tmiyamon.github.io/blog/2014/11/22/generator-docpad-plugin/';
+        var disqus_url = 'http://tmiyamon.github.io/blog/2014/11/22/generator-docpad-plugin/';
         var disqus_script = 'embed.js';
       
     (function () {
