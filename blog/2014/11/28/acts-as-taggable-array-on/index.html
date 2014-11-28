@@ -1,0 +1,459 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>限定的タグ機能を持つRails用gemを作った - 上澄み20%</title>
+  <meta name="author" content="tmiyamon">
+
+  
+  <meta name="description" content="Railsでタグ機能を追加する際に定番のgemといえるのがacts-as-taggable-onです。
+このgemを使うと一般的に必要とされている機能がだいたい手に入るので非常に重宝します。
+しかしタグの結びつけと検索だけしたい、などの限定的な場合オーバースペック気味に感じる場合があります。 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-site-verification" content="57epThrqLnR6KuzzZGJlKtxWAiGJyTf-qYqv26fme-o" />
+
+  
+  <link rel="canonical" href="http://tmiyamon.github.io/blog/2014/11/28/acts-as-taggable-array-on">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="上澄み20%" type="application/atom+xml">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <script src="/javascripts/custom.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-55812786-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">上澄み20%</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+<div class="nav-tool">
+  
+    <form action="https://www.google.com/search" method="get">
+      <fieldset role="search">
+        <input type="hidden" name="q" value="site:tmiyamon.github.io" />
+        <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+      </fieldset>
+    </form>
+  
+  <ul class="subscription" data-subscription="rss">
+    <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS" data-navtext="RSS"><i class="fa fa-rss"></i></a></li>
+    
+  </ul>
+</div>
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">限定的タグ機能を持つRails用gemを作った</h1>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/gem/'>gem</a>, <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/tag/'>tag</a>
+  
+</span>
+
+
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-28T15:16:10+09:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Railsでタグ機能を追加する際に定番のgemといえるのが<a href="https://github.com/mbleigh/acts-as-taggable-on">acts-as-taggable-on</a>です。<br />
+このgemを使うと一般的に必要とされている機能がだいたい手に入るので非常に重宝します。<br />
+しかしタグの結びつけと検索だけしたい、などの限定的な場合オーバースペック気味に感じる場合があります。<br />
+今回はpostgresのarray機能を使った検索に特化したタグ用gemを作ってみました。</p>
+
+<h2 id="section">コンセプト</h2>
+<p>acts-as-taggable-onを使った際最初に気になったのはmany-to-manyのスキーマを必要とすることでした。<br />
+正直に実装するのであれば確かにそうなるのですが、タグやタグ付けされる対象が多くなってくるとassociationがえらい数になるのは目に見えてみます。</p>
+
+<p>そもそも、タグに関する機能として考えられるのは</p>
+
+<ol>
+  <li>タグ付け</li>
+  <li>タグによる検索</li>
+  <li>タグ名補完</li>
+  <li>タグ列挙</li>
+  <li>ページング</li>
+  <li>タグ付け数によるソート</li>
+  <li>タグクラウド</li>
+</ol>
+
+<p>あたりだと考えられます。</p>
+
+<p>これら全ての機能が必要であればacts-as-taggable-onの実装のようにmany-to-manyが必要でしょう。<br />
+特に5,6,7あたりは無いと実現できません。</p>
+
+<p>しかし今回僕が必要としたのは1,2だけでした。<br />
+タグ付けされる対象にタグを突っ込むカラム一つあればできるのではないでしょうか？<br />
+もっとシンプルに出来そうな気がしますね。</p>
+
+<h2 id="section-1">実装</h2>
+
+<p>ここで僕が注目したのはpostgresのarray型です。<br />
+postgresのarrayはindexも作ることができて、タグ機能への応用ができそうです。<br />
+僕はheroku上で動かすことを想定しているのでpostgres限定の動作でも何ら問題ありません。</p>
+
+<p>ということで作りました。<br />
+その名も<a href="https://github.com/tmiyamon/acts-as-taggable-array-on">acts-as-taggable-array-on</a></p>
+
+<h2 id="section-2">機能</h2>
+
+<p>詳しくはREADMEを見てもらえればわかると思います。<br />
+メインのファイルは50行足らずの小さなライブラリです。</p>
+
+<p>用意した機能は主に</p>
+
+<ol>
+  <li>指定したタグを含む検索</li>
+  <li>指定したタグを含まない検索</li>
+  <li>タグ列挙</li>
+  <li>タグクラウド</li>
+</ol>
+
+<p>です。</p>
+
+<h2 id="section-3">ベンチマーク</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+<span class="line-number">43</span>
+<span class="line-number">44</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">% rake bench:write bench:find_by_id bench:find_by_tag
+</span><span class="line">Deleted all ActsAsTaggableOn::Tag
+</span><span class="line">Deleted all ActsAsTaggableOn::Tagging
+</span><span class="line">Deleted all TaggableUser
+</span><span class="line">Deleted all TaggableArrayUser
+</span><span class="line">Finsihed to clean
+</span><span class="line">
+</span><span class="line">
+</span><span class="line"><span class="c">###################################################################</span>
+</span><span class="line">
+</span><span class="line">bench:write
+</span><span class="line">Rehearsal ---------------------------------------------------------
+</span><span class="line">Using Taggable          6.950000   0.420000   7.370000 <span class="o">(</span>  9.223704<span class="o">)</span>
+</span><span class="line">Using Postgres Arrays   0.710000   0.090000   0.800000 <span class="o">(</span>  1.184734<span class="o">)</span>
+</span><span class="line">------------------------------------------------ total: 8.170000sec
+</span><span class="line">
+</span><span class="line">                            user     system      total        real
+</span><span class="line">Using Taggable          5.800000   0.340000   6.140000 <span class="o">(</span>  7.842051<span class="o">)</span>
+</span><span class="line">Using Postgres Arrays   0.680000   0.090000   0.770000 <span class="o">(</span>  1.117812<span class="o">)</span>
+</span><span class="line">
+</span><span class="line"><span class="c">###################################################################</span>
+</span><span class="line">
+</span><span class="line">bench:find_by_id
+</span><span class="line">Rehearsal ---------------------------------------------------------
+</span><span class="line">Using Taggable          1.490000   0.110000   1.600000 <span class="o">(</span>  2.079776<span class="o">)</span>
+</span><span class="line">Using Postgres Arrays   0.240000   0.030000   0.270000 <span class="o">(</span>  0.419430<span class="o">)</span>
+</span><span class="line">------------------------------------------------ total: 1.870000sec
+</span><span class="line">
+</span><span class="line">                            user     system      total        real
+</span><span class="line">Using Taggable          1.440000   0.100000   1.540000 <span class="o">(</span>  2.023188<span class="o">)</span>
+</span><span class="line">Using Postgres Arrays   0.250000   0.040000   0.290000 <span class="o">(</span>  0.434233<span class="o">)</span>
+</span><span class="line">
+</span><span class="line"><span class="c">###################################################################</span>
+</span><span class="line">
+</span><span class="line">bench:find_by_tag
+</span><span class="line">Rehearsal ---------------------------------------------------------
+</span><span class="line">Using Taggable          0.600000   0.040000   0.640000 <span class="o">(</span>  1.107227<span class="o">)</span>
+</span><span class="line">Using Postgres Arrays   0.060000   0.000000   0.060000 <span class="o">(</span>  0.060019<span class="o">)</span>
+</span><span class="line">------------------------------------------------ total: 0.700000sec
+</span><span class="line">
+</span><span class="line">                            user     system      total        real
+</span><span class="line">Using Taggable          0.600000   0.040000   0.640000 <span class="o">(</span>  1.100302<span class="o">)</span>
+</span><span class="line">Using Postgres Arrays   0.030000   0.000000   0.030000 <span class="o">(</span>  0.033001<span class="o">)</span>
+</span><span class="line">rake bench:write bench:find_by_id bench:find_by_tag  20.29s user 1.52s system 77% cpu 28.322 total
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>なんだか思ったより速い</p>
+
+<h2 id="section-4">まとめ</h2>
+
+<p>github: <a href="https://github.com/tmiyamon/acts-as-taggable-array-on">acts-as-taggable-array-on</a><br />
+benchmark: <a href="https://github.com/tmiyamon/acts-as-taggable-benchmark/">acts-as-taggable-benchmark</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">tmiyamon</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-28T15:16:10+09:00" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/gem/'>gem</a>, <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/tag/'>tag</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  <a href="http://b.hatena.ne.jp/entry/http://tmiyamon.github.io/blog/2014/11/28/acts-as-taggable-array-on/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://tmiyamon.github.io/blog/2014/11/28/acts-as-taggable-array-on/" data-via="tmiyamon" data-counturl="http://tmiyamon.github.io/blog/2014/11/28/acts-as-taggable-array-on/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta nav-posts">
+      
+        <a class="basic-alignment left" href="/blog/2014/11/22/generator-docpad-plugin/" title="Previous Post: Docpad Pluginを簡単に作れるYeoman Generatorを作った">
+          <i class="fa fa-angle-left fa-fw"></i>Docpad Pluginを簡単に作れるYeoman Generatorを作った
+        </a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/11/28/acts-as-taggable-array-on/">Railsでシンプルなタグ機能を追加するgemを作った</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/22/generator-docpad-plugin/">Docpad Pluginを簡単に作れるYeoman Generatorを作った</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/17/hackathon-techcrunch2014/">Techcrunch2014ハッカソンに参加してきた</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/13/configure-the-behavior-of-scaffolding-in-rails/">Railsのgenerateコマンドを俺好みに設定する</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/10/write-my-own-generator-2/">YeomanのGeneratorを自作して作業効率を上げる！(2)</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/tmiyamon">@tmiyamon</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'tmiyamon',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - tmiyamon -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tmiyamon';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://tmiyamon.github.io/blog/2014/11/28/acts-as-taggable-array-on/';
+        var disqus_url = 'http://tmiyamon.github.io/blog/2014/11/28/acts-as-taggable-array-on/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
