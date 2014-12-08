@@ -9,7 +9,7 @@
   <meta name="author" content="tmiyamon">
 
   
-  <meta name="description" content="Blog Archive 2014 Railsでシンプルなタグ機能を追加するgemを作った
+  <meta name="description" content="Blog Archive 2014 限定的タグ機能を持つRails用gemを作った
 Nov 28 2014 posted in gem, rails, tag Docpad Pluginを簡単に作れるYeoman Generatorを作った
 Nov 22 2014 posted in &hellip;">
   
@@ -52,13 +52,18 @@ Nov 22 2014 posted in &hellip;">
 </head>
 
 <body   >
-  <header role="banner"><hgroup>
+  <header role="banner">
+    <div class="blog-container">
+      <hgroup>
   <h1><a href="/">上澄み20%</a></h1>
   
 </hgroup>
 
 </header>
-  <nav role="navigation"><ul class="main-navigation">
+    </div>
+  <nav role="navigation">
+    <div class="blog-container">
+      <ul class="main-navigation">
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
 </ul>
@@ -77,7 +82,8 @@ Nov 22 2014 posted in &hellip;">
   </ul>
 </div>
 </nav>
-  <div id="main">
+    </div>
+  <div id="main" class="blog-container">
     <div id="content">
       <div>
 <article role="article">
@@ -96,7 +102,7 @@ Nov 22 2014 posted in &hellip;">
 
 <article>
   
-<h1><a href="/blog/2014/11/28/acts-as-taggable-array-on/">Railsでシンプルなタグ機能を追加するgemを作った</a></h1>
+<h1><a href="/blog/2014/11/28/acts-as-taggable-array-on/">限定的タグ機能を持つRails用gemを作った</a></h1>
 <time datetime="2014-11-28T15:16:10+09:00" pubdate><span class='month'>Nov</span> <span class='day'>28</span> <span class='year'>2014</span></time>
 
 <footer>
@@ -252,7 +258,7 @@ Nov 22 2014 posted in &hellip;">
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/11/28/acts-as-taggable-array-on/">Railsでシンプルなタグ機能を追加するgemを作った</a>
+        <a href="/blog/2014/11/28/acts-as-taggable-array-on/">限定的タグ機能を持つRails用gemを作った</a>
       </li>
     
       <li class="post">
@@ -313,12 +319,15 @@ Nov 22 2014 posted in &hellip;">
 
     </div>
   </div>
-  <footer role="contentinfo"><p>
+  <footer role="contentinfo">
+    <div class="blog-container">
+      <p>
   Copyright &copy; 2014 - tmiyamon -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
 </footer>
+    </div>
   
 
 <script type="text/javascript">

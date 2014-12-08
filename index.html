@@ -52,13 +52,18 @@
 </head>
 
 <body   >
-  <header role="banner"><hgroup>
+  <header role="banner">
+    <div class="blog-container">
+      <hgroup>
   <h1><a href="/">上澄み20%</a></h1>
   
 </hgroup>
 
 </header>
-  <nav role="navigation"><ul class="main-navigation">
+    </div>
+  <nav role="navigation">
+    <div class="blog-container">
+      <ul class="main-navigation">
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
 </ul>
@@ -77,7 +82,8 @@
   </ul>
 </div>
 </nav>
-  <div id="main">
+    </div>
+  <div id="main" class="blog-container">
     <div id="content">
       <div class="blog-index">
   
@@ -87,7 +93,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/11/28/acts-as-taggable-array-on/">Railsでシンプルなタグ機能を追加するgemを作った</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/11/28/acts-as-taggable-array-on/">限定的タグ機能を持つRails用gemを作った</a></h1>
       
 
 <span class="categories">
@@ -124,6 +130,154 @@
 しかしタグの結びつけと検索だけしたい、などの限定的な場合オーバースペック気味に感じる場合があります。<br />
 今回はpostgresのarray機能を使った検索に特化したタグ用gemを作ってみました。</p>
 
+<h2 id="section">コンセプト</h2>
+<p>acts-as-taggable-onを使った際最初に気になったのはmany-to-manyのスキーマを必要とすることでした。<br />
+正直に実装するのであれば確かにそうなるのですが、タグやタグ付けされる対象が多くなってくるとassociationがえらい数になるのは目に見えてみます。</p>
+
+<p>そもそも、タグに関する機能として考えられるのは</p>
+
+<ol>
+  <li>タグ付け</li>
+  <li>タグによる検索</li>
+  <li>タグ名補完</li>
+  <li>タグ列挙</li>
+  <li>ページング</li>
+  <li>タグ付け数によるソート</li>
+  <li>タグクラウド</li>
+</ol>
+
+<p>あたりだと考えられます。</p>
+
+<p>これら全ての機能が必要であればacts-as-taggable-onの実装のようにmany-to-manyが必要でしょう。<br />
+特に5,6,7あたりは無いと実現できません。</p>
+
+<p>しかし今回僕が必要としたのは1,2だけでした。<br />
+タグ付けされる対象にタグを突っ込むカラム一つあればできるのではないでしょうか？<br />
+もっとシンプルに出来そうな気がしますね。</p>
+
+<h2 id="section-1">実装</h2>
+
+<p>ここで僕が注目したのはpostgresのarray型です。<br />
+postgresのarrayはindexも作ることができて、タグ機能への応用ができそうです。<br />
+僕はheroku上で動かすことを想定しているのでpostgres限定の動作でも何ら問題ありません。</p>
+
+<p>ということで作りました。<br />
+その名も<a href="https://github.com/tmiyamon/acts-as-taggable-array-on">acts-as-taggable-array-on</a></p>
+
+<h2 id="section-2">機能</h2>
+
+<p>詳しくはREADMEを見てもらえればわかると思います。<br />
+メインのファイルは50行足らずの小さなライブラリです。</p>
+
+<p>用意した機能は主に</p>
+
+<ol>
+  <li>指定したタグを含む検索</li>
+  <li>指定したタグを含まない検索</li>
+  <li>タグ列挙</li>
+  <li>タグクラウド</li>
+</ol>
+
+<p>です。</p>
+
+<h2 id="section-3">ベンチマーク</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+<span class="line-number">43</span>
+<span class="line-number">44</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">% rake bench:write bench:find_by_id bench:find_by_tag
+</span><span class="line">Deleted all ActsAsTaggableOn::Tag
+</span><span class="line">Deleted all ActsAsTaggableOn::Tagging
+</span><span class="line">Deleted all TaggableUser
+</span><span class="line">Deleted all TaggableArrayUser
+</span><span class="line">Finsihed to clean
+</span><span class="line">
+</span><span class="line">
+</span><span class="line"><span class="c">###################################################################</span>
+</span><span class="line">
+</span><span class="line">bench:write
+</span><span class="line">Rehearsal ---------------------------------------------------------
+</span><span class="line">Using Taggable          6.950000   0.420000   7.370000 <span class="o">(</span>  9.223704<span class="o">)</span>
+</span><span class="line">Using Postgres Arrays   0.710000   0.090000   0.800000 <span class="o">(</span>  1.184734<span class="o">)</span>
+</span><span class="line">------------------------------------------------ total: 8.170000sec
+</span><span class="line">
+</span><span class="line">                            user     system      total        real
+</span><span class="line">Using Taggable          5.800000   0.340000   6.140000 <span class="o">(</span>  7.842051<span class="o">)</span>
+</span><span class="line">Using Postgres Arrays   0.680000   0.090000   0.770000 <span class="o">(</span>  1.117812<span class="o">)</span>
+</span><span class="line">
+</span><span class="line"><span class="c">###################################################################</span>
+</span><span class="line">
+</span><span class="line">bench:find_by_id
+</span><span class="line">Rehearsal ---------------------------------------------------------
+</span><span class="line">Using Taggable          1.490000   0.110000   1.600000 <span class="o">(</span>  2.079776<span class="o">)</span>
+</span><span class="line">Using Postgres Arrays   0.240000   0.030000   0.270000 <span class="o">(</span>  0.419430<span class="o">)</span>
+</span><span class="line">------------------------------------------------ total: 1.870000sec
+</span><span class="line">
+</span><span class="line">                            user     system      total        real
+</span><span class="line">Using Taggable          1.440000   0.100000   1.540000 <span class="o">(</span>  2.023188<span class="o">)</span>
+</span><span class="line">Using Postgres Arrays   0.250000   0.040000   0.290000 <span class="o">(</span>  0.434233<span class="o">)</span>
+</span><span class="line">
+</span><span class="line"><span class="c">###################################################################</span>
+</span><span class="line">
+</span><span class="line">bench:find_by_tag
+</span><span class="line">Rehearsal ---------------------------------------------------------
+</span><span class="line">Using Taggable          0.600000   0.040000   0.640000 <span class="o">(</span>  1.107227<span class="o">)</span>
+</span><span class="line">Using Postgres Arrays   0.060000   0.000000   0.060000 <span class="o">(</span>  0.060019<span class="o">)</span>
+</span><span class="line">------------------------------------------------ total: 0.700000sec
+</span><span class="line">
+</span><span class="line">                            user     system      total        real
+</span><span class="line">Using Taggable          0.600000   0.040000   0.640000 <span class="o">(</span>  1.100302<span class="o">)</span>
+</span><span class="line">Using Postgres Arrays   0.030000   0.000000   0.030000 <span class="o">(</span>  0.033001<span class="o">)</span>
+</span><span class="line">rake bench:write bench:find_by_id bench:find_by_tag  20.29s user 1.52s system 77% cpu 28.322 total
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>なんだか思ったより速い</p>
+
+<h2 id="section-4">まとめ</h2>
+
+<p>github: <a href="https://github.com/tmiyamon/acts-as-taggable-array-on">acts-as-taggable-array-on</a><br />
+benchmark: <a href="https://github.com/tmiyamon/acts-as-taggable-benchmark/">acts-as-taggable-benchmark</a></p>
 </div>
   
   
@@ -638,7 +792,7 @@ incrementだと差分増加、decrementだと差分減少。<br />
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/11/28/acts-as-taggable-array-on/">Railsでシンプルなタグ機能を追加するgemを作った</a>
+        <a href="/blog/2014/11/28/acts-as-taggable-array-on/">限定的タグ機能を持つRails用gemを作った</a>
       </li>
     
       <li class="post">
@@ -698,12 +852,15 @@ incrementだと差分増加、decrementだと差分減少。<br />
 
     </div>
   </div>
-  <footer role="contentinfo"><p>
+  <footer role="contentinfo">
+    <div class="blog-container">
+      <p>
   Copyright &copy; 2014 - tmiyamon -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
 </footer>
+    </div>
   
 
 <script type="text/javascript">

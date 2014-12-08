@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>限定的タグ機能を持つRails用gemを作った - 上澄み20%</title>
+  <title>高パフォーマンスかつシンプルなRails用タグgemを作った - 上澄み20%</title>
   <meta name="author" content="tmiyamon">
 
   
@@ -52,13 +52,18 @@
 </head>
 
 <body   >
-  <header role="banner"><hgroup>
+  <header role="banner">
+    <div class="blog-container">
+      <hgroup>
   <h1><a href="/">上澄み20%</a></h1>
   
 </hgroup>
 
 </header>
-  <nav role="navigation"><ul class="main-navigation">
+    </div>
+  <nav role="navigation">
+    <div class="blog-container">
+      <ul class="main-navigation">
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
 </ul>
@@ -77,14 +82,15 @@
   </ul>
 </div>
 </nav>
-  <div id="main">
+    </div>
+  <div id="main" class="blog-container">
     <div id="content">
       <div>
 <article class="hentry" role="article">
   
   <header>
     
-      <h1 class="entry-title">限定的タグ機能を持つRails用gemを作った</h1>
+      <h1 class="entry-title">高パフォーマンスかつシンプルなRails用タグgemを作った</h1>
       
 
 <span class="categories">
@@ -120,6 +126,8 @@
 このgemを使うと一般的に必要とされている機能がだいたい手に入るので非常に重宝します。<br />
 しかしタグの結びつけと検索だけしたい、などの限定的な場合オーバースペック気味に感じる場合があります。<br />
 今回はpostgresのarray機能を使った検索に特化したタグ用gemを作ってみました。</p>
+
+<!-- More -->
 
 <h2 id="section">コンセプト</h2>
 <p>acts-as-taggable-onを使った際最初に気になったのはmany-to-manyのスキーマを必要とすることでした。<br />
@@ -341,7 +349,7 @@ benchmark: <a href="https://github.com/tmiyamon/acts-as-taggable-benchmark/">act
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/11/28/acts-as-taggable-array-on/">Railsでシンプルなタグ機能を追加するgemを作った</a>
+        <a href="/blog/2014/11/28/acts-as-taggable-array-on/">限定的タグ機能を持つRails用gemを作った</a>
       </li>
     
       <li class="post">
@@ -402,12 +410,15 @@ benchmark: <a href="https://github.com/tmiyamon/acts-as-taggable-benchmark/">act
 
     </div>
   </div>
-  <footer role="contentinfo"><p>
+  <footer role="contentinfo">
+    <div class="blog-container">
+      <p>
   Copyright &copy; 2014 - tmiyamon -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
 </footer>
+    </div>
   
 
 <script type="text/javascript">

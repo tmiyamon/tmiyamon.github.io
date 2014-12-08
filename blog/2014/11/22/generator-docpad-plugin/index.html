@@ -52,13 +52,18 @@ nodeを使用していて、大量のプラグインが既に存在し、様々�
 </head>
 
 <body   >
-  <header role="banner"><hgroup>
+  <header role="banner">
+    <div class="blog-container">
+      <hgroup>
   <h1><a href="/">上澄み20%</a></h1>
   
 </hgroup>
 
 </header>
-  <nav role="navigation"><ul class="main-navigation">
+    </div>
+  <nav role="navigation">
+    <div class="blog-container">
+      <ul class="main-navigation">
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
 </ul>
@@ -77,7 +82,8 @@ nodeを使用していて、大量のプラグインが既に存在し、様々�
   </ul>
 </div>
 </nav>
-  <div id="main">
+    </div>
+  <div id="main" class="blog-container">
     <div id="content">
       <div>
 <article class="hentry" role="article">
@@ -216,8 +222,8 @@ DocPadはJekyllのようにブログに特化しているわけではないの�
         </a>
       
       
-        <a class="basic-alignment right" href="/blog/2014/11/28/acts-as-taggable-array-on/" title="Next Post: 限定的タグ機能を持つRails用gemを作った">
-          限定的タグ機能を持つRails用gemを作った
+        <a class="basic-alignment right" href="/blog/2014/11/28/acts-as-taggable-array-on/" title="Next Post: 高パフォーマンスかつシンプルなRails用タグgemを作った">
+          高パフォーマンスかつシンプルなRails用タグgemを作った
           <i class="fa fa-angle-right fa-fw"></i>
         </a>
       
@@ -240,7 +246,7 @@ DocPadはJekyllのようにブログに特化しているわけではないの�
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/11/28/acts-as-taggable-array-on/">Railsでシンプルなタグ機能を追加するgemを作った</a>
+        <a href="/blog/2014/11/28/acts-as-taggable-array-on/">限定的タグ機能を持つRails用gemを作った</a>
       </li>
     
       <li class="post">
@@ -301,12 +307,15 @@ DocPadはJekyllのようにブログに特化しているわけではないの�
 
     </div>
   </div>
-  <footer role="contentinfo"><p>
+  <footer role="contentinfo">
+    <div class="blog-container">
+      <p>
   Copyright &copy; 2014 - tmiyamon -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
 </footer>
+    </div>
   
 
 <script type="text/javascript">
