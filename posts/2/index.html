@@ -9,8 +9,9 @@
   <meta name="author" content="tmiyamon">
 
   
-  <meta name="description" content="
-">
+  <meta name="description" content="Rails4.1で用意されているcountを操作するメソッドについてまとめた。 以下の形で用意されている。 increment increment! decrement decrement! 概要
+modelをinstance化した後使用する。
+基本的にattributeと差分を指定する。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -92,6 +93,62 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/08/13/rails-counter-methods/">Rails4.1のCount(数値増減)操作系メソッドまとめ</a></h1>
+      
+
+
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-13T02:53:47+09:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Rails4.1で用意されているcountを操作するメソッドについてまとめた。 以下の形で用意されている。</p>
+
+<ul>
+  <li>increment</li>
+  <li>increment!</li>
+  <li>decrement</li>
+  <li>decrement!</li>
+</ul>
+
+<h2 id="section">概要</h2>
+<p>modelをinstance化した後使用する。<br />
+基本的にattributeと差分を指定する。差分のデフォルト値は1。<br />
+incrementだと差分増加、decrementだと差分減少。<br />
+!付きだとsaveする。!無しだとsaveしない。
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/08/13/rails-counter-methods/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/02/20/posttitle/">Posttitle</a></h1>
       
 
@@ -141,7 +198,11 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/11/28/acts-as-taggable-array-on/">限定的タグ機能を持つRails用gemを作った</a>
+        <a href="/blog/2014/12/17/custom-android-studio-template/">Android Best Practiceを簡単に使う方法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/28/acts-as-taggable-array-on/">高パフォーマンスでシンプルなタグ機能Rails用gem</a>
       </li>
     
       <li class="post">
@@ -154,10 +215,6 @@
     
       <li class="post">
         <a href="/blog/2014/11/13/configure-the-behavior-of-scaffolding-in-rails/">Railsのgenerateコマンドを俺好みに設定する</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/11/10/write-my-own-generator-2/">YeomanのGeneratorを自作して作業効率を上げる！(2)</a>
       </li>
     
   </ul>

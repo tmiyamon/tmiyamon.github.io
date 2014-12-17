@@ -1,0 +1,582 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Android Best Practiceを簡単に使う方法 - 上澄み20%</title>
+  <meta name="author" content="tmiyamon">
+
+  
+  <meta name="description" content="最近githubで☆を集めているandroid-best-practiceがあります。その名の通りandroidのベストプラクティスをまとめた文書なのですが、まだまだandroid初心者な僕にとっては非常に参考になります。
+ただ、参考になるのはいいのですが、 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-site-verification" content="57epThrqLnR6KuzzZGJlKtxWAiGJyTf-qYqv26fme-o" />
+
+  
+  <link rel="canonical" href="http://tmiyamon.github.io/blog/2014/12/17/custom-android-studio-template">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="上澄み20%" type="application/atom+xml">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <script src="/javascripts/custom.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-55812786-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner">
+    <div class="blog-container">
+      <hgroup>
+  <h1><a href="/">上澄み20%</a></h1>
+  
+</hgroup>
+
+</header>
+    </div>
+  <nav role="navigation">
+    <div class="blog-container">
+      <ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+<div class="nav-tool">
+  
+    <form action="https://www.google.com/search" method="get">
+      <fieldset role="search">
+        <input type="hidden" name="q" value="site:tmiyamon.github.io" />
+        <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+      </fieldset>
+    </form>
+  
+  <ul class="subscription" data-subscription="rss">
+    <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS" data-navtext="RSS"><i class="fa fa-rss"></i></a></li>
+    
+  </ul>
+</div>
+</nav>
+    </div>
+  <div id="main" class="blog-container">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Android Best Practiceを簡単に使う方法</h1>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/android/'>android</a>, <a class='category' href='/blog/categories/android-studio/'>android studio</a>, <a class='category' href='/blog/categories/work/'>work</a>
+  
+</span>
+
+
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-12-17T12:09:52+09:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="/images/android-studio-splash.png" alt="android-studio" /></p>
+
+<p>最近githubで☆を集めている<a href="https://github.com/futurice/android-best-practices">android-best-practice</a>があります。その名の通りandroidのベストプラクティスをまとめた文書なのですが、まだまだandroid初心者な僕にとっては非常に参考になります。<br />
+ただ、参考になるのはいいのですが、僕の頭ではいちいち覚えていられないという悲しい現状に直面しています。<br />
+いい加減何度も見なおすのは面倒なので、（全てではありませんが）簡単にandroid-best-practiceに沿う方法を作りました。<br />
+僕は開発にAndroid Studioを使用しているので、Android Studioで対応します。</p>
+
+<!-- More -->
+
+<h2 id="android-studio">Android Studioのテンプレート改造</h2>
+
+<p>Android Studioの仕組みとしてテンプレートというものがあります。<br />
+何か物を作るときのベースとなるものを切り出しているわけですね。<br />
+この仕組を利用してandroid-best-practiceに沿ったプロジェクトを作れないかと考えました。<br />
+置き場所はMacだと<code>/Applications/Android Studio.app/Contents/plugins/android/lib/templates/</code>あたりです。</p>
+
+<h3 id="section">テンプレート概要</h3>
+
+<p>テンプレートの中で一番直感的なのは<code>activities</code>以下です。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">AndroidTVActivity/
+</span><span class="line">BlankActivity/
+</span><span class="line">BlankActivityWithFragment/
+</span><span class="line">BlankWearActivity/
+</span><span class="line">EmptyActivity/
+</span><span class="line">FullscreenActivity/
+</span><span class="line">GoogleMapsActivity/
+</span><span class="line">GooglePlayServicesActivity/
+</span><span class="line">LoginActivity/
+</span><span class="line">MasterDetailFlow/
+</span><span class="line">NavigationDrawerActivity/
+</span><span class="line">SettingsActivity/
+</span><span class="line">TabbedActivity/</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Android Studioを使用している方々にとっては見慣れているものが並んでいるのではないでしょうか？<br />
+そう、Activityのウィザードで選べるものがここで定義されているわけですね。</p>
+
+<p>これらの中身はここでは詳しく触れませんが、<a href="http://www.i-programmer.info/projects/215-mobile/6843-custom-projects-in-android-studio.html">ここ</a>や<a href="http://qiita.com/kgmyshin/items/9c803a21451e603531f0">ここ</a>が参考になるかもしれません。<br />
+中身を見ていくと、プロジェクトやモジュールに設定される内容がここには無いことに気づきます。<br />
+このディレクトに指定されているテンプレートの役割はあくまで「Activityを作った時に必要となる内容」であって、「プロジェクトやモジュールを作った時に必要となる内容」では無いようです。</p>
+
+<p>プロジェクトやモジュールを作った時に参照されるのは<code>gradle-projects</code>以下です。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">AndroidWearModule/
+</span><span class="line">ImportExistingProject/
+</span><span class="line">NewAndroidModule/
+</span><span class="line">NewAndroidProject/
+</span><span class="line">NewAndroidTVModule/
+</span><span class="line">NewGlassModule/
+</span><span class="line">NewJavaLibrary/</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>いかにもそれっぽいテンプレートが並んでいますね。<br />
+特に<code>NewAndroidMoudle</code>と<code>NewAndroidProject</code>が気になります。</p>
+
+<p><code>NewAndroidProject</code>はプロジェクト作製時、つまりgradleのトップディレクトリ直下のファイルに対するテンプレートのようです。<br />
+android-best-practiceの内容はそれぞれのモジュールに対して行うものが主なので、<code>NewAndroidProject</code>は今回は対象ではありません。</p>
+
+<p>では<code>NewAndroidModule</code>はどうでしょうか。
+<code>NewAndroidProject/root/build.gradle.ftl</code>あたりを見ると、テンプレートのsyntaxで見づらいですが、見慣れた記述が見えるはずです。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+<span class="line-number">43</span>
+<span class="line-number">44</span>
+<span class="line-number">45</span>
+<span class="line-number">46</span>
+<span class="line-number">47</span>
+<span class="line-number">48</span>
+<span class="line-number">49</span>
+<span class="line-number">50</span>
+<span class="line-number">51</span>
+<span class="line-number">52</span>
+<span class="line-number">53</span>
+<span class="line-number">54</span>
+<span class="line-number">55</span>
+<span class="line-number">56</span>
+<span class="line-number">57</span>
+<span class="line-number">58</span>
+<span class="line-number">59</span>
+<span class="line-number">60</span>
+<span class="line-number">61</span>
+<span class="line-number">62</span>
+<span class="line-number">63</span>
+<span class="line-number">64</span>
+<span class="line-number">65</span>
+<span class="line-number">66</span>
+<span class="line-number">67</span>
+<span class="line-number">68</span>
+<span class="line-number">69</span>
+<span class="line-number">70</span>
+<span class="line-number">71</span>
+<span class="line-number">72</span>
+<span class="line-number">73</span>
+<span class="line-number">74</span>
+<span class="line-number">75</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">&lt;#if !(perModuleRepositories??) || perModuleRepositories&gt;
+</span><span class="line">buildscript {
+</span><span class="line">    repositories {
+</span><span class="line">        jcenter()
+</span><span class="line">&lt;#if mavenUrl != "mavenCentral"&gt;
+</span><span class="line">        maven {
+</span><span class="line">            url '${mavenUrl}'
+</span><span class="line">        }
+</span><span class="line">&lt;/#if&gt;
+</span><span class="line">    }
+</span><span class="line">    dependencies {
+</span><span class="line">        classpath 'com.android.tools.build:gradle:${gradlePluginVersion}'
+</span><span class="line">    }
+</span><span class="line">}
+</span><span class="line">&lt;/#if&gt;
+</span><span class="line">&lt;#if isLibraryProject?? &amp;&amp; isLibraryProject&gt;
+</span><span class="line">apply plugin: 'com.android.library'
+</span><span class="line">&lt;#else&gt;
+</span><span class="line">apply plugin: 'com.android.application'
+</span><span class="line">&lt;/#if&gt;
+</span><span class="line">&lt;#if !(perModuleRepositories??) || perModuleRepositories&gt;
+</span><span class="line">
+</span><span class="line">repositories {
+</span><span class="line">        jcenter()
+</span><span class="line">&lt;#if mavenUrl != "mavenCentral"&gt;
+</span><span class="line">        maven {
+</span><span class="line">            url '${mavenUrl}'
+</span><span class="line">        }
+</span><span class="line">&lt;/#if&gt;
+</span><span class="line">}
+</span><span class="line">&lt;/#if&gt;
+</span><span class="line">
+</span><span class="line">android {
+</span><span class="line">    compileSdkVersion &lt;#if buildApiString?matches("^\\d+$")&gt;${buildApiString}&lt;#else&gt;'${buildApiString}'&lt;/#if&gt;
+</span><span class="line">    buildToolsVersion "${buildToolsVersion}"
+</span><span class="line">
+</span><span class="line">    defaultConfig {
+</span><span class="line">    &lt;#if isLibraryProject?? &amp;&amp; isLibraryProject&gt;
+</span><span class="line">    &lt;#else&gt;
+</span><span class="line">    applicationId "${packageName}"
+</span><span class="line">    &lt;/#if&gt;
+</span><span class="line">        minSdkVersion &lt;#if minApi?matches("^\\d+$")&gt;${minApi}&lt;#else&gt;'${minApi}'&lt;/#if&gt;
+</span><span class="line">        targetSdkVersion &lt;#if targetApiString?matches("^\\d+$")&gt;${targetApiString}&lt;#else&gt;'${targetApiString}'&lt;/#if&gt;
+</span><span class="line">        versionCode 1
+</span><span class="line">        versionName "1.0"
+</span><span class="line">    }
+</span><span class="line">&lt;#if javaVersion?? &amp;&amp; (javaVersion != "1.6" &amp;&amp; buildApi lt 21 || javaVersion != "1.7")&gt;
+</span><span class="line">
+</span><span class="line">    compileOptions {
+</span><span class="line">        sourceCompatibility JavaVersion.VERSION_${javaVersion?replace('.','_','i')}
+</span><span class="line">        targetCompatibility JavaVersion.VERSION_${javaVersion?replace('.','_','i')}
+</span><span class="line">    }
+</span><span class="line">&lt;/#if&gt;
+</span><span class="line">&lt;#if enableProGuard&gt;
+</span><span class="line">    buildTypes {
+</span><span class="line">        release {
+</span><span class="line">            minifyEnabled false
+</span><span class="line">            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+</span><span class="line">        }
+</span><span class="line">    }
+</span><span class="line">&lt;/#if&gt;
+</span><span class="line">}
+</span><span class="line">
+</span><span class="line">dependencies {
+</span><span class="line">    &lt;#if dependencyList?? &gt;
+</span><span class="line">    &lt;#list dependencyList as dependency&gt;
+</span><span class="line">    compile '${dependency}'
+</span><span class="line">    &lt;/#list&gt;
+</span><span class="line">    &lt;/#if&gt;
+</span><span class="line">    compile fileTree(dir: 'libs', include: ['*.jar'])
+</span><span class="line">&lt;#if WearprojectName?has_content &amp;&amp; NumberOfEnabledFormFactors?has_content &amp;&amp; NumberOfEnabledFormFactors gt 1&gt;
+</span><span class="line">    wearApp project(':${WearprojectName}')
+</span><span class="line">    compile 'com.google.android.gms:play-services:+'
+</span><span class="line">&lt;/#if&gt;
+</span><span class="line">}</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>どうやらモジュール生成に対する挙動をカスタマイズしたければ、ここらあたりを弄ればいけそうですね。</p>
+
+<h3 id="section-1">改造</h3>
+
+<p>android-best-practiceの中で、自動化できそうなところから拾っていきます<br />
+具体的な内容は気が向いたら解説しようと思います。</p>
+
+<h4 id="gradle-configurationhttpsgithubcomfuturiceandroid-best-practicesgradle-configuration"><a href="https://github.com/futurice/android-best-practices#gradle-configuration">Gradle Configuration</a></h4>
+
+<p>デフォルトの<code>root/build.gradle.ftl</code><code>に記述を加え、パスワードのサンプルを書いた</code>root/gradle.properties<code>を作成し、</code>recipe.xml.ftl`で挙動を設定する</p>
+
+<h4 id="librarieshttpsgithubcomfuturiceandroid-best-practiceslibraries"><a href="https://github.com/futurice/android-best-practices#libraries">Libraries</a></h4>
+
+<p><code>recipe.xml.ftl</code>にdependencyを追加。<br />
+バージョンは今後変化することも考え<code>globals.xml.ftl</code>に切り出し。</p>
+
+<h4 id="java-package-architecturehttpsgithubcomfuturiceandroid-best-practicesjava-packages-architecture"><a href="https://github.com/futurice/android-best-practices#java-packages-architecture">Java Package Architecture</a></h4>
+
+<p><code>recipe.xml.ftl</code>にパッケージのディレクトリを作るmkdirを追加。</p>
+
+<h4 id="test-frameworkshttpsgithubcomfuturiceandroid-best-practicestest-frameworks"><a href="https://github.com/futurice/android-best-practices#test-frameworks">Test frameworks</a></h4>
+
+<p><code>recipe.xml.ftl</code>のdependencyでは<code>build.gradle</code>のandroidTestCompileは追加できないため、直接<code>root/build.gradle.ftl</code>に記述。</p>
+
+<p>今回は以上です。</p>
+
+<h2 id="section-2">実行結果</h2>
+
+<p><img src="/images/android-studio-template-result.png" alt="result" /></p>
+
+<p>狙いどおりパッケージの中にandroid-best-practiceに沿ったディレクトリ構造(<a href="https://github.com/futurice/android-best-practices#java-packages-architecture">Java Package Architecture</a>)、build.gradleの中にsigningConfigs(<a href="https://github.com/futurice/android-best-practices#gradle-configuration">Gradle Configuration</a>)とcompile(<a href="https://github.com/futurice/android-best-practices#libraries">Libraries</a>)、androidTestCompile(<a href="https://github.com/futurice/android-best-practices#test-frameworks">Test frameworks</a>)が追加されていますね！</p>
+
+<p>android-best-practiceにはまだリソース管理の考え方等色々ありますが、これだけでも環境統一という意味で開発環境の改善に繋げられるのではないでしょうか。</p>
+
+<h2 id="section-3">成果物</h2>
+
+<p><a href="https://github.com/tmiyamon/android-studio-template">tmiyamon/android-studio-template</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">tmiyamon</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-12-17T12:09:52+09:00" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/android/'>android</a>, <a class='category' href='/blog/categories/android-studio/'>android studio</a>, <a class='category' href='/blog/categories/work/'>work</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  <a href="http://b.hatena.ne.jp/entry/http://tmiyamon.github.io/blog/2014/12/17/custom-android-studio-template/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://tmiyamon.github.io/blog/2014/12/17/custom-android-studio-template/" data-via="tmiyamon" data-counturl="http://tmiyamon.github.io/blog/2014/12/17/custom-android-studio-template/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta nav-posts">
+      
+        <a class="basic-alignment left" href="/blog/2014/11/28/acts-as-taggable-array-on/" title="Previous Post: 高パフォーマンスでシンプルなタグ機能Rails用gem">
+          <i class="fa fa-angle-left fa-fw"></i>高パフォーマンスでシンプルなタグ機能Rails用gem
+        </a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/12/17/custom-android-studio-template/">Android Best Practiceを簡単に使う方法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/28/acts-as-taggable-array-on/">高パフォーマンスでシンプルなタグ機能Rails用gem</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/22/generator-docpad-plugin/">Docpad Pluginを簡単に作れるYeoman Generatorを作った</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/17/hackathon-techcrunch2014/">Techcrunch2014ハッカソンに参加してきた</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/13/configure-the-behavior-of-scaffolding-in-rails/">Railsのgenerateコマンドを俺好みに設定する</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/tmiyamon">@tmiyamon</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'tmiyamon',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo">
+    <div class="blog-container">
+      <p>
+  Copyright &copy; 2014 - tmiyamon -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+    </div>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tmiyamon';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://tmiyamon.github.io/blog/2014/12/17/custom-android-studio-template/';
+        var disqus_url = 'http://tmiyamon.github.io/blog/2014/12/17/custom-android-studio-template/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
